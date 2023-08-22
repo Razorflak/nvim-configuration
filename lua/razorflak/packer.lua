@@ -40,6 +40,7 @@ return require('packer').startup(function(use)
             ts_update()
         end,}
         use("christoomey/vim-tmux-navigator")
+        use("sindrets/diffview.nvim")
         use("nvim-treesitter/playground")
         use("theprimeagen/harpoon")
         use("theprimeagen/refactoring.nvim")
@@ -47,6 +48,7 @@ return require('packer').startup(function(use)
         use("tpope/vim-fugitive")
         use("nvim-treesitter/nvim-treesitter-context");
         use ("dense-analysis/ale");
+        use ("ggandor/leap.nvim");
         use {
             'VonHeikemen/lsp-zero.nvim',
             branch = 'v1.x',
