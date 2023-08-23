@@ -17,6 +17,10 @@ vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 -- Remappage pour joindre la ligne actuelle avec la suivante et conserver le curseur à sa position
 vim.keymap.set("n", "J", "mzJ`z")
 
+-- Ajouter une ligne vide en mode normal
+vim.keymap.set("n","<leader>o", "o<Esc>")
+vim.keymap.set("n","<leader>O", "O<Esc>")
+
 -- Remappages pour défilement en maintenant le contenu précédent visible
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
