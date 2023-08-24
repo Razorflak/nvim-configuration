@@ -48,6 +48,7 @@ return require('packer').startup(function(use)
             ts_update()
         end,}
         use("christoomey/vim-tmux-navigator")
+        use("ray-x/lsp_signature.nvim")
         use("sindrets/diffview.nvim")
         use("nvim-treesitter/playground")
         use("theprimeagen/harpoon")
