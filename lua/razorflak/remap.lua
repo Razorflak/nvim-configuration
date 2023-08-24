@@ -55,3 +55,5 @@ vim.keymap.set("n", "<leader>j", "<cmd>lprev<CR>zz")
 -- Remappage pour effectuer un remplacement global avec la sélection en mode normal
 vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
 
+-- ramapage pour les macros
+vim.keymap.set("n", "<leader>q", "@q")
