@@ -133,3 +133,4 @@ navbuddy.setup {
         scrolloff = nil        -- scrolloff value when navbuddy is open
     }
 }
+vim.keymap.set("n", "<leader>n", "<cmd>Navbuddy<CR>")
