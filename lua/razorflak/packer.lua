@@ -83,16 +83,16 @@ return require('packer').startup(function(use)
                 {'rafamadriz/friendly-snippets'},
             }
         }
-        -- use {
-            -- "SmiteshP/nvim-navbuddy",
-            -- requires = {
-                -- "neovim/nvim-lspconfig",
-                -- "SmiteshP/nvim-navic",
-                -- "MunifTanjim/nui.nvim",
-                -- "numToStr/Comment.nvim",        -- Optional
-                -- "nvim-telescope/telescope.nvim" -- Optional
-            -- }
-        -- }
+        use {
+            "SmiteshP/nvim-navbuddy",
+            requires = {
+                "neovim/nvim-lspconfig",
+                "SmiteshP/nvim-navic",
+                "MunifTanjim/nui.nvim",
+                "numToStr/Comment.nvim",        -- Optional
+                "nvim-telescope/telescope.nvim" -- Optional
+            }
+        }
 
         use("folke/zen-mode.nvim")
         use("eandrju/cellular-automaton.nvim")
@@ -102,7 +102,6 @@ return require('packer').startup(function(use)
             'Exafunction/codeium.vim',
             config = function ()
                 -- Change '<C-g>' here to any keycode you like.
-                print("jta")
                 vim.keymap.set('i', '<C-i>', function () return vim.fn['codeium#Accept']() end, { expr = true })
                 vim.keymap.set('i', '<c-;>', function() return vim.fn['codeium#CycleCompletions'](1) end, { expr = true })
                 vim.keymap.set('i', '<c-,>', function() return vim.fn['codeium#CycleCompletions'](-1) end, { expr = true })

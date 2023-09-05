@@ -1,6 +1,14 @@
 local navbuddy = require("nvim-navbuddy")
 local actions = require("nvim-navbuddy.actions")
 
+require("lsp-zero").on_attach(function(client, bufnr)
+    if client.name == "eslint" then
+        -- On skip eslint, car il fait planté le chargement du lsp
+        return
+    end
+    navbuddy.attach(client, bufnr)
+end)
+
 navbuddy.setup {
     window = {
         border = "single",  -- "rounded", "double", "solid", "none"
@@ -124,7 +132,7 @@ navbuddy.setup {
     },
     lsp = {
         auto_attach = false,   -- If set to true, you don't need to manually use attach function
-        preference = {"ts-server"},      -- list of lsp server names in order of preference
+        preference = {"tsserver"},      -- list of lsp server names in order of preference
     },
     source_buffer = {
         follow_node = true,    -- Keep the current node in focus on the source buffer
