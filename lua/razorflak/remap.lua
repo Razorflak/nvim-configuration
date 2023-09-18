@@ -57,3 +57,6 @@ vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><
 
 -- ramapage pour les macros
 vim.keymap.set("n", "<leader>q", "@q")
+
+-- accès rapide aux notes du projet
+vim.keymap.set("n", "<leader>q", "@q")
