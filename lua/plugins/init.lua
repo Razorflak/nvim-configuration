@@ -23,14 +23,11 @@ return {
     },
 
     "christoomey/vim-tmux-navigator",
-    "nvim-treesitter/playground",
     "theprimeagen/refactoring.nvim",
     "mbbill/undotree",
     "tpope/vim-fugitive",
     "nvim-treesitter/nvim-treesitter-context",
     "dense-analysis/ale",
-    "folke/zen-mode.nvim",
     "eandrju/cellular-automaton.nvim",
-    "laytan/cloak.nvim",
     "tpope/vim-surround"
 }
