@@ -3,21 +3,21 @@ return {
     branch = 'v2.x',
     dependencies = {
         -- LSP Support
-        {'neovim/nvim-lspconfig'},
-        {'williamboman/mason.nvim'},
-        {'williamboman/mason-lspconfig.nvim'},
+        { 'neovim/nvim-lspconfig' },
+        { 'williamboman/mason.nvim' },
+        { 'williamboman/mason-lspconfig.nvim' },
 
         -- Autocompletion
-        {'hrsh7th/nvim-cmp'},
-        {'hrsh7th/cmp-buffer'},
-        {'hrsh7th/cmp-path'},
-        {'saadparwaiz1/cmp_luasnip'},
-        {'hrsh7th/cmp-nvim-lsp'},
-        {'hrsh7th/cmp-nvim-lua'},
+        { 'hrsh7th/nvim-cmp' },
+        { 'hrsh7th/cmp-buffer' },
+        { 'hrsh7th/cmp-path' },
+        { 'saadparwaiz1/cmp_luasnip' },
+        { 'hrsh7th/cmp-nvim-lsp' },
+        { 'hrsh7th/cmp-nvim-lua' },
 
         -- Snippets
-        {'L3MON4D3/LuaSnip'},
-        {'rafamadriz/friendly-snippets'},
+        { 'L3MON4D3/LuaSnip' },
+        { 'rafamadriz/friendly-snippets' },
     },
     config = function()
         local lsp = require("lsp-zero")
@@ -32,7 +32,7 @@ return {
         lsp.nvim_workspace()
 
         local cmp = require('cmp')
-        local cmp_select = {behavior = cmp.SelectBehavior.Select}
+        local cmp_select = { behavior = cmp.SelectBehavior.Select }
         local cmp_mappings = lsp.defaults.cmp_mappings({
             ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
             ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
@@ -47,17 +47,22 @@ return {
             mapping = cmp_mappings
         })
 
-        lsp.set_preferences({
-            suggest_lsp_servers = true,
-            sign_icons = {
-                error = 'T',
-                warn = 'W',
-                hint = 'H',
-                info = 'I'
-            }
+        lsp.set_sign_icons({
+            error = '✘',
+            warn = '▲',
+            hint = '⚑',
+            info = '»'
         })
+
         lsp.on_attach(function(client, bufnr)
-            local opts = {buffer = bufnr, remap = false}
+            -- Navbuddy attach
+            local navbuddy = require("nvim-navbuddy")
+            if client.name ~= "eslint" then
+                navbuddy.attach(client, bufnr)
+            end
+            --
+            -- Remap for goto definition
+            local opts = { buffer = bufnr, remap = false }
             vim.keymap.set("n", "gd", function()
                 vim.lsp.buf.definition()
                 vim.defer_fn(function()
@@ -78,6 +83,8 @@ return {
                     vim.api.nvim_input("zz")
                 end, 100)
             end, opts)
+            --
+            -- Remap for lsp acitons
             vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
             vim.keymap.set("n", "<leader>vws", function() vim.lsp.buf.workspace_symbol() end, opts)
             vim.keymap.set("n", "<leader>vd", function() vim.diagnostic.open_float() end, opts)
@@ -94,6 +101,5 @@ return {
         vim.diagnostic.config({
             virtual_text = true
         })
-
     end
 }

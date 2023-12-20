@@ -151,6 +151,5 @@ return{
     }
 }
 vim.keymap.set("n", "<leader>n", "<cmd>Navbuddy<CR>")
-
     end
 }
