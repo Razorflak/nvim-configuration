@@ -54,7 +54,7 @@ return {
         lsp.on_attach(function(client, bufnr)
             -- Navbuddy attach
             local navbuddy = require("nvim-navbuddy")
-            if client.name ~= "eslint" then
+            if client.name ~= "eslint" and  client.name ~= "null-ls" then
                 navbuddy.attach(client, bufnr)
             end
             --
@@ -91,6 +91,7 @@ return {
             vim.keymap.set("n", "<leader>vrr", function() vim.lsp.buf.references() end, opts)
             vim.keymap.set("n", "<leader>vrn", function() vim.lsp.buf.rename() end, opts)
             vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
+            vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
         end)
 
         lsp.setup()

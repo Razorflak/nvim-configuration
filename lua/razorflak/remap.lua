@@ -43,9 +43,6 @@ vim.keymap.set("n", "Q", "<nop>")
 -- Remappage pour exécuter une commande shell dans une nouvelle fenêtre tmux
 vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
 
--- Remappage pour formater le code en utilisant le langage server protocol (LSP)
-vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
-
 -- Remappages pour naviguer entre les erreurs et les avertissements du LSP
 vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz")
 vim.keymap.set("n", "<C-j>", "<cmd>cprev<CR>zz")
