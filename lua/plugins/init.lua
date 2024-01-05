@@ -27,7 +27,6 @@ return {
     "mbbill/undotree",
     "tpope/vim-fugitive",
     "nvim-treesitter/nvim-treesitter-context",
-    "dense-analysis/ale",
     "eandrju/cellular-automaton.nvim",
     "tpope/vim-surround"
 }

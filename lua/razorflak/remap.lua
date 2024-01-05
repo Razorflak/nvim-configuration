@@ -18,6 +18,7 @@ vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("n", "J", "mzJ`z")
 
 -- Ajouter une ligne vide en mode normal
+-- C'est con car ça va aussi vite de faire "O <Esc>" mais j'aime bien
 vim.keymap.set("n","<leader>o", "o<Esc>")
 vim.keymap.set("n","<leader>O", "O<Esc>")
 

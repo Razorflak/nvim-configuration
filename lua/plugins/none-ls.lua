@@ -1,3 +1,4 @@
+-- Fonction pour le formatage automatique à la sauvegarde
 local async_formatting = function(bufnr)
     bufnr = bufnr or vim.api.nvim_get_current_buf()
 
@@ -37,6 +38,9 @@ return {
             sources = {
                 null_ls.builtins.formatting.stylua,
                 null_ls.builtins.formatting.prettier,
+                null_ls.builtins.diagnostics.eslint,
+                null_ls.builtins.code_actions.eslint,
+                null_ls.builtins.code_actions.eslint_d,
             },
             on_attach = function(client, bufnr)
                 if client.supports_method("textDocument/formatting") then
