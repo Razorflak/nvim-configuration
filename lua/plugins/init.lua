@@ -28,5 +28,6 @@ return {
 	"nvim-treesitter/nvim-treesitter-context",
 	"eandrju/cellular-automaton.nvim",
 	"tpope/vim-surround",
+	"dense-analysis/ale",
 	"dyng/ctrlsf.vim",
 }
