@@ -48,5 +48,8 @@ vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
 vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
 vim.keymap.set("v", "<leader>s", [[y:%s/<C-r>"//gI<Left><Left><Left>]])
 
+-- Recherche sur la sélection visuel dans le fichier
+vim.keymap.set("v", "<leader>vs", [[y/<C-r>"]])
+
 -- ramapage pour les macros
 vim.keymap.set("n", "<leader>q", "@q")
