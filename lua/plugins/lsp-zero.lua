@@ -30,6 +30,7 @@ return {
                 capabilities = capabilities
             })
 
+            lspconfig.eslint.setup({ })
 
             vim.keymap.set("n", "gd", function()
                 vim.lsp.buf.definition()
@@ -52,7 +53,7 @@ return {
                 end, 100)
             end, {})
             --
-            -- Remap for lsp acitons
+            -- Remap for lsp actions
             vim.keymap.set("n", "K", function()
                 vim.lsp.buf.hover()
             end, {})

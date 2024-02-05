@@ -39,7 +39,7 @@ return {
         })
 
 		vim.keymap.set("i", "<tab>", function()
-			require("copilot.suggestion").accept_line()
+			require("copilot.suggestion").accept()
 		end)
     end
 }
