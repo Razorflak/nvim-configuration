@@ -1,3 +1,39 @@
+
+local function getBiomeConfiguration()
+    local ok, util = pcall(require, 'lspconfig.util')
+    if not ok then
+        vim.notify 'lspconfig.util could not be loaded'
+        return
+    end
+
+    local config = {
+        root_dir = util.root_pattern 'biome.json',
+        single_file_support = false,
+    }
+
+    return config
+end
+
+local function getEslintConfiguration()
+    local ok, util = pcall(require, 'lspconfig.util')
+if not ok then
+    vim.notify 'lspconfig.util could not be loaded'
+    return
+end
+
+local config = {
+    root_dir = util.root_pattern(
+        '.eslintrc.js',
+        '.eslintrc.cjs',
+        '.eslintrc.yaml',
+        '.eslintrc.yml',
+        '.eslintrc.json'
+    ),
+    single_file_support = false,
+}
+return config
+end
+
 return {
     {
         "williamboman/mason.nvim",
@@ -30,7 +66,9 @@ return {
                 capabilities = capabilities
             })
 
-            lspconfig.eslint.setup({ })
+            lspconfig.eslint.setup(getEslintConfiguration())
+
+            lspconfig.biome.setup(getBiomeConfiguration())
 
             vim.keymap.set("n", "gd", function()
                 vim.lsp.buf.definition()
@@ -82,3 +120,4 @@ return {
         end,
     },
 }
+
