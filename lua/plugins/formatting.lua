@@ -7,17 +7,17 @@ return {
 
         conform.setup({
             formatters_by_ft = {
-                javascript = {"biome", "prettier" },
+                javascript = { "biome", "prettier" },
                 -- typescript = {"biome", "prettier"},
-                javascriptreact = {"biome", "prettier" },
-                typescriptreact = {"biome", "prettier" },
+                javascriptreact = { "biome", "prettier" },
+                typescriptreact = { "biome", "prettier" },
                 typescript = function()
                     local root_dir = vim.fn.getcwd()
-                    local prettierrc_path = vim.fs.find('.prettierrc', root_dir)
-                    if prettierrc_path ~= '' then
-                        return {"prettier"}
+                    if vim.fn.filereadable(root_dir .. '/.prettierrc') == 1 then
+                        vim.api.nvim_out_write("Prettier\n")
+                        return { "prettier" }
                     else
-                        return {"biome", "prettier"}
+                        return { "biome" }
                     end
                 end,
                 svelte = { "prettier" },
