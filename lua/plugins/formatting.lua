@@ -13,7 +13,7 @@ return {
                 typescriptreact = { "biome", "prettier" },
                 typescript = function()
                     local root_dir = vim.fn.getcwd()
-                    if vim.fn.filereadable(root_dir .. '/.prettierrc') == 1 then
+                    if vim.fn.filereadable(root_dir .. '/.prettierrc') == 1 or vim.fn.filereadable(root_dir .. '/.prettierrc.js') == 1 then
                         vim.api.nvim_out_write("Prettier\n")
                         return { "prettier" }
                     else

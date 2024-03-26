@@ -1,4 +1,3 @@
-
 local function getBiomeConfiguration()
     local ok, util = pcall(require, 'lspconfig.util')
     if not ok then
@@ -16,22 +15,22 @@ end
 
 local function getEslintConfiguration()
     local ok, util = pcall(require, 'lspconfig.util')
-if not ok then
-    vim.notify 'lspconfig.util could not be loaded'
-    return
-end
+    if not ok then
+        vim.notify 'lspconfig.util could not be loaded'
+        return
+    end
 
-local config = {
-    root_dir = util.root_pattern(
-        '.eslintrc.js',
-        '.eslintrc.cjs',
-        '.eslintrc.yaml',
-        '.eslintrc.yml',
-        '.eslintrc.json'
-    ),
-    single_file_support = false,
-}
-return config
+    local config = {
+        root_dir = util.root_pattern(
+            '.eslintrc.js',
+            '.eslintrc.cjs',
+            '.eslintrc.yaml',
+            '.eslintrc.yml',
+            '.eslintrc.json'
+        ),
+        single_file_support = false,
+    }
+    return config
 end
 
 return {
@@ -62,14 +61,12 @@ return {
             lspconfig.html.setup({
                 capabilities = capabilities
             })
-            lspconfig.lua_ls.setup({
-                capabilities = capabilities
-            })
 
             lspconfig.eslint.setup(getEslintConfiguration())
 
             lspconfig.biome.setup(getBiomeConfiguration())
 
+            vim.keymap.set('n', 'gD', vim.lsp.buf.type_definition, opts)
             vim.keymap.set("n", "gd", function()
                 vim.lsp.buf.definition()
                 vim.defer_fn(function()
@@ -120,4 +117,3 @@ return {
         end,
     },
 }
-
