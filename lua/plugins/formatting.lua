@@ -1,10 +1,7 @@
 return {
     "stevearc/conform.nvim",
-    lazy = true,
-    event = { "BufReadPre", "BufNewFile" }, -- to disable, comment this out
     config = function()
         local conform = require("conform")
-
         conform.setup({
             formatters_by_ft = {
                 javascript = { "biome", "prettier" },
@@ -14,7 +11,6 @@ return {
                 typescript = function()
                     local root_dir = vim.fn.getcwd()
                     if vim.fn.filereadable(root_dir .. '/.prettierrc') == 1 or vim.fn.filereadable(root_dir .. '/.prettierrc.js') == 1 then
-                        vim.api.nvim_out_write("Prettier\n")
                         return { "prettier" }
                     else
                         return { "biome" }
@@ -33,15 +29,16 @@ return {
             format_on_save = {
                 lsp_fallback = true,
                 async = false,
-                timeout_ms = 1000,
+                timeout_ms = 500,
             },
+            notify_on_error = false,
         })
 
         vim.keymap.set({ "n", "v" }, "<leader>mp", function()
             conform.format({
                 lsp_fallback = true,
                 async = false,
-                timeout_ms = 1000,
+                timeout_ms = 500,
             })
         end, { desc = "Format file or range (in visual mode)" })
     end,
