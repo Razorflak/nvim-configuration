@@ -23,6 +23,8 @@ local function getEslintConfiguration()
 	local config = {
 		root_dir = util.root_pattern(
 			".eslintrc.js",
+			".eslintrc.mjs",
+			".eslintrc",
 			".eslintrc.cjs",
 			".eslintrc.yaml",
 			".eslintrc.yml",

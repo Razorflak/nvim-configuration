@@ -1,5 +1,5 @@
 vim.g.mapleader = " "
-vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
+vim.keymap.set("n", "<leader>pv", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 vim.keymap.set("x", "<leader>p", [["_dP]])
 
 -- keymap pour pouvoir copié facilement de nvim dans le press papier
@@ -53,4 +53,3 @@ vim.keymap.set("v", "<leader>vs", [[y/<C-r>"]])
 
 -- ramapage pour les macros
 vim.keymap.set("n", "<leader>q", "@q")
-
