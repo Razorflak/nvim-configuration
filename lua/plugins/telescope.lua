@@ -15,9 +15,10 @@ end
 return {
 	"nvim-telescope/telescope.nvim",
 	tag = "0.1.5",
-	dependencies = { "nvim-lua/plenary.nvim" },
+	dependencies = { "nvim-lua/plenary.nvim", "xiyaowong/telescope-emoji.nvim" },
 	config = function()
 		require("telescope").setup({})
+		require("telescope").load_extension("emoji")
 		local builtin = require("telescope.builtin")
 		-- vim.keymap.set("n", "<leader>ff", builtin.find_files, {})
 		vim.api.nvim_set_keymap(
