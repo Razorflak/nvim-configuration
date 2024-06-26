@@ -1,10 +1,23 @@
+local project_formatters = {
+	{ path = "neomed.git/eslintv2", formatter = "eslint_d" },
+	{ path = "stickycom.git", formatter = "eslint_d" },
+	{ path = "neomed.git", formatter = "prettier" },
+}
+
+local function get_formatter(default_formatter)
+	local root_dir = vim.fn.getcwd()
+	for _, project in ipairs(project_formatters) do
+		if string.find(root_dir, project.path) then
+			return { project.formatter }
+		end
+	end
+	return { default_formatter }
+end
+
 return {
 	"stevearc/conform.nvim",
-	lazy = true,
-	event = { "BufReadPre", "BufNewFile" }, -- to disable, comment this out
 	config = function()
 		local conform = require("conform")
-
 		conform.setup({
 			formatters_by_ft = {
 				javascript = { "biome", "prettier" },
@@ -12,7 +25,7 @@ return {
 				javascriptreact = { "biome", "prettier" },
 				typescriptreact = { "biome", "prettier" },
 				typescript = function()
-					return { "eslint_d" }
+					return get_formatter("prettier")
 				end,
 				svelte = { "prettier" },
 				css = { "prettier" },
