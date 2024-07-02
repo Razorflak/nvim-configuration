@@ -1,13 +1,19 @@
 local project_formatters = {
 	{ path = "neomed.git/eslintv2", formatter = "eslint_d" },
+	{ path = "neomed.git/dd-trace-summer", formatter = "eslint_d" },
+	{ path = "neomed.git/develop", formatter = "prettier" },
 	{ path = "stickycom.git", formatter = "eslint_d" },
-	{ path = "neomed.git", formatter = "prettier" },
+	{ path = "neomed.git", formatter = "eslint_d" },
 }
+
+local function escape_pattern(text)
+	return text:gsub("([^%w])", "%%%1")
+end
 
 local function get_formatter(default_formatter)
 	local root_dir = vim.fn.getcwd()
-	for _, project in ipairs(project_formatters) do
-		if string.find(root_dir, project.path) then
+	for i, project in ipairs(project_formatters) do
+		if string.match(root_dir, escape_pattern(project.path)) then
 			return { project.formatter }
 		end
 	end

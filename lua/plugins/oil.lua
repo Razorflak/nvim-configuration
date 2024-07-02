@@ -11,7 +11,7 @@ return {
 					"mtime",
 				},
 				keymaps = {
-					["<C-h>"] = false,
+					["<C-l>"] = false,
 					["<M-h>"] = "actions.select_split",
 					["g?"] = "actions.show_help",
 					["<CR>"] = "actions.select",
@@ -20,7 +20,7 @@ return {
 					["<C-t>"] = "actions.select_tab",
 					["<C-p>"] = "actions.preview",
 					["<C-c>"] = "actions.close",
-					["<C-l>"] = "actions.refresh",
+					["<C-r>"] = "actions.refresh",
 					["-"] = "actions.parent",
 					["_"] = "actions.open_cwd",
 					["`"] = "actions.cd",

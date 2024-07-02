@@ -54,3 +54,5 @@ vim.keymap.set("v", "<leader>vs", [[y/<C-r>"]])
 
 -- ramapage pour les macros
 vim.keymap.set("n", "<leader>q", "@q")
+
+vim.api.nvim_set_keymap("n", "<C-l>", "", { noremap = true, silent = true })
