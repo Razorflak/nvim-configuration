@@ -21,7 +21,6 @@ return {
 	"tpope/vim-fugitive",
 	"nvim-treesitter/nvim-treesitter-context",
 	"eandrju/cellular-automaton.nvim",
-	"dyng/ctrlsf.vim",
 	{
 		"danymat/neogen",
 		config = true,
