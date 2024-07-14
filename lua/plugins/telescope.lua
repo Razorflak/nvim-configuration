@@ -31,6 +31,7 @@ return {
 		vim.keymap.set("n", "<leader>fg", builtin.live_grep, {})
 		vim.keymap.set("n", "<leader>fb", builtin.buffers, {})
 		vim.keymap.set("n", "<leader>fh", builtin.help_tags, {})
+		vim.keymap.set("n", "<leader>ft", builtin.registers, {})
 		-- Permet de basculer de la recherche de la sélection visuel à une recherche sur telescope
 		vim.keymap.set("v", "<leader>fv", function()
 			local text = vim.getVisualSelection()
