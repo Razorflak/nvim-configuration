@@ -31,12 +31,38 @@ return {
 			prompts = prompts,
 			auto_follow_cursor = false, -- Don't follow the cursor after getting response
 			mappings = {
-				close = "q", -- Close chat
-				reset = "<C-c>", -- Clear the chat buffer
-				complete = "<Tab>", -- Change to insert mode and press tab to get the completion
-				submit_prompt = "<CR>", -- Submit question to Copilot Chat
-				accept_diff = "<C-a>", -- Accept the diff
-				show_diff = "<C-s>", -- Show the diff
+				complete = {
+					detail = "Use @<Tab> or /<Tab> for options.",
+					insert = "<Tab>",
+				},
+				close = {
+					normal = "q",
+					insert = "<C-c>",
+				},
+				reset = {
+					normal = "<C-l>",
+					insert = "<C-l>",
+				},
+				submit_prompt = {
+					normal = "<CR>",
+					insert = "<C-m>",
+				},
+				accept_diff = {
+					normal = "<C-a>",
+					insert = "<C-a>",
+				},
+				yank_diff = {
+					normal = "gy",
+				},
+				show_diff = {
+					normal = "gd",
+				},
+				show_system_prompt = {
+					normal = "gp",
+				},
+				show_user_selection = {
+					normal = "gs",
+				},
 			},
 		},
 		config = function(_, opts)
