@@ -119,6 +119,17 @@ return {
 				vim.lsp.buf.signature_help()
 			end, {})
 			vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
+
+			-- Fonction pour appeler LspStop et LspStart avec un délai
+			local function lsp_stop_start()
+				vim.cmd("LspStop")
+				vim.defer_fn(function()
+					vim.cmd("LspStart")
+				end, 100) -- délai de 100 ms
+			end
+
+			-- Création de la commande pour arrêter et démarrer le LSP
+			vim.api.nvim_create_user_command("LspStopStart", lsp_stop_start, { nargs = 0 })
 		end,
 	},
 }
