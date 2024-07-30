@@ -43,6 +43,7 @@ return {
 				timeout_ms = 3000,
 			},
 			notify_on_error = false,
+			log_level = vim.log.levels.DEBUG,
 		})
 
 		vim.keymap.set({ "n", "v" }, "<leader>mp", function()
