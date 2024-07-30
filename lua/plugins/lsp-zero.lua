@@ -122,7 +122,7 @@ return {
 
 			-- Fonction pour appeler LspStop et LspStart avec un délai
 			local function lsp_stop_start()
-				vim.cmd("LspStop")
+				vim.cmd("LspRestart")
 				vim.defer_fn(function()
 					vim.cmd("LspStart")
 				end, 100) -- délai de 100 ms

@@ -1,6 +1,4 @@
 local project_formatters = {
-	{ path = "neomed.git/eslintv2", formatter = "eslint_d" },
-	{ path = "neomed.git/dd-trace-summer", formatter = "eslint_d" },
 	{ path = "neomed.git/develop", formatter = "prettier" },
 	{ path = "stickycom.git", formatter = "eslint_d" },
 	{ path = "neomed.git", formatter = "eslint_d" },
@@ -49,6 +47,7 @@ return {
 				timeout_ms = 3000,
 			},
 			notify_on_error = false,
+			log_level = vim.log.levels.DEBUG,
 		})
 
 		vim.keymap.set({ "n", "v" }, "<leader>mp", function()
