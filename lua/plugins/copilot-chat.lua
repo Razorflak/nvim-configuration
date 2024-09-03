@@ -25,7 +25,7 @@ return {
 	{
 		dir = IS_DEV and "~/Projects/research/CopilotChat.nvim" or nil,
 		"CopilotC-Nvim/CopilotChat.nvim",
-		version = "v2.10.1",
+		version = "v2.14.0",
 		-- branch = "canary", -- Use the canary branch if you want to test the latest features but it might be unstable
 		-- Do not use branch and version together, either use branch or version
 		dependencies = {
@@ -150,6 +150,31 @@ return {
 				desc = "CopilotChat - Prompt actions",
 			},
 			{ "<leader>ccc", "<cmd>CopilotChat<cr>", desc = "CopilotChat - Toggle CopilotChat window" },
+			{
+				"<leader>ccb",
+				mode = "x",
+				function()
+					local input = vim.fn.input("Quick Chat: ")
+					if input ~= "" then
+						require("CopilotChat").ask(input, { selection = require("CopilotChat.select").buffer })
+					end
+				end,
+				desc = "CopilotChat - Quick chat about the buffer",
+			},
+			{
+				"<leader>ccv",
+				mode = "x",
+				function()
+					local input = vim.fn.input("Quick Chat: ")
+					if input ~= "" then
+						require("CopilotChat").ask(input, {
+							selection = require("CopilotChat.select").visual,
+							system_prompt = "Tu es un ingénieur, expert en développement. Réponds au questions de manière clair sans inventer d'information.",
+						})
+					end
+				end,
+				desc = "CopilotChat - Quick chat about the visual selection",
+			},
 		},
 	},
 }
