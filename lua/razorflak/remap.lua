@@ -56,3 +56,10 @@ vim.keymap.set("v", "<leader>vs", [[y/<C-r>"]])
 vim.keymap.set("n", "<leader>q", "@q")
 
 vim.api.nvim_set_keymap("n", "<C-l>", "", { noremap = true, silent = true })
+
+-- Terminal remap
+
+vim.keymap.set("t", "<C-h>", "<C-\\><C-N><C-w>h", t_opts)
+vim.keymap.set("t", "<C-j>", "<C-\\><C-N><C-w>j", t_opts)
+vim.keymap.set("t", "<C-k>", "<C-\\><C-N><C-w>k", t_opts)
+vim.keymap.set("t", "<C-l>", "<C-\\><C-N><C-w>l", t_opts)

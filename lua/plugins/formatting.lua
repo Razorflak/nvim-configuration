@@ -1,5 +1,7 @@
 local project_formatters = {
 	{ path = "neomed.git/develop", formatter = "prettier" },
+	{ path = "neomed.git/test-synth", formatter = "prettier" },
+	{ path = "neomed.git/neo-331-med19-numberly", formatter = "prettier" },
 	{ path = "stickycom.git", formatter = "eslint_d" },
 	{ path = "neomed.git", formatter = "eslint_d" },
 }

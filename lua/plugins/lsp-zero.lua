@@ -66,7 +66,7 @@ return {
 						})
 					end
 					local opts = { buffer = buffer }
-					vim.keymap.set("n", "<leader>gds", goto_source_definition, opts)
+					vim.keymap.set("n", "gds", goto_source_definition, opts)
 				end,
 				handlers = {
 					["workspace/executeCommand"] = function(_err, result, ctx, _config)
