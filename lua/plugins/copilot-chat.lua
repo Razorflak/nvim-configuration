@@ -152,7 +152,7 @@ return {
 			{ "<leader>ccc", "<cmd>CopilotChat<cr>", desc = "CopilotChat - Toggle CopilotChat window" },
 			{
 				"<leader>ccb",
-				mode = "x",
+				mode = "n",
 				function()
 					local input = vim.fn.input("Quick Chat: ")
 					if input ~= "" then
