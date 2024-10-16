@@ -57,7 +57,7 @@ return {
 			local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 			local lspconfig = require("lspconfig")
-			lspconfig.tsserver.setup({
+			lspconfig.ts_ls.setup({
 				capabilities = capabilities,
 				on_attach = function(_client, buffer)
 					local function goto_source_definition()
@@ -84,6 +84,9 @@ return {
 			})
 
 			lspconfig.html.setup({
+				capabilities = capabilities,
+			})
+			lspconfig.lua_ls.setup({
 				capabilities = capabilities,
 			})
 
