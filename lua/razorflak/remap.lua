@@ -52,6 +52,9 @@ vim.keymap.set("v", "<leader>s", [[y:%s/<C-r>"//gI<Left><Left><Left>]])
 -- Recherche sur la sélection visuel dans le fichier
 vim.keymap.set("v", "<leader>vs", [[y/<C-r>"]])
 
+-- Pour écraser le C-l de oil
+vim.api.nvim_set_keymap("n", "<C-l>", "", { noremap = true, silent = true })
+
 -- ramapage pour les macros
 vim.keymap.set("n", "<leader>q", "@q")
 
