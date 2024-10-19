@@ -63,3 +63,10 @@ vim.keymap.set("t", "<C-h>", "<C-\\><C-N><C-w>h", t_opts)
 vim.keymap.set("t", "<C-j>", "<C-\\><C-N><C-w>j", t_opts)
 vim.keymap.set("t", "<C-k>", "<C-\\><C-N><C-w>k", t_opts)
 vim.keymap.set("t", "<C-l>", "<C-\\><C-N><C-w>l", t_opts)
+-- Redimensionner horizontalement
+vim.keymap.set("n", "<A-l>", ":vertical resize +1<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<A-h>", ":vertical resize -1<CR>", { noremap = true, silent = true })
+
+-- Redimensionner verticalement
+vim.keymap.set("n", "<A-k>", ":resize +1<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<A-j>", ":resize -1<CR>", { noremap = true, silent = true })
