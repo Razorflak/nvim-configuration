@@ -54,3 +54,11 @@ vim.keymap.set("v", "<leader>vs", [[y/<C-r>"]])
 
 -- ramapage pour les macros
 vim.keymap.set("n", "<leader>q", "@q")
+
+-- Redimensionner horizontalement
+vim.keymap.set("n", "<A-l>", ":vertical resize +1<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<A-h>", ":vertical resize -1<CR>", { noremap = true, silent = true })
+
+-- Redimensionner verticalement
+vim.keymap.set("n", "<A-k>", ":resize +1<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<A-j>", ":resize -1<CR>", { noremap = true, silent = true })
