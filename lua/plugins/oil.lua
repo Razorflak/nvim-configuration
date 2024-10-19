@@ -4,6 +4,9 @@ return {
 		dependencies = { "nvim-tree/nvim-web-devicons" },
 		config = function()
 			require("oil").setup({
+				use_default_keymaps = false,
+				default_file_explorer = true,
+				watch_for_changes = true,
 				columns = {
 					"icon",
 					"permissions",
@@ -11,16 +14,14 @@ return {
 					"mtime",
 				},
 				keymaps = {
-					["<C-h>"] = false,
-					["<M-h>"] = "actions.select_split",
 					["g?"] = "actions.show_help",
 					["<CR>"] = "actions.select",
 					["<C-s>"] = "actions.select_vsplit",
-					["<C-h>"] = "actions.select_split",
+					["<C-v>"] = "actions.select_split",
 					["<C-t>"] = "actions.select_tab",
-					["<C-p>"] = "actions.preview",
+					["<C-i>"] = "actions.preview",
 					["<C-c>"] = "actions.close",
-					["<C-l>"] = "actions.refresh",
+					["<C-r>"] = "actions.refresh",
 					["-"] = "actions.parent",
 					["_"] = "actions.open_cwd",
 					["`"] = "actions.cd",
@@ -34,6 +35,18 @@ return {
 					show_hidden = true,
 				},
 				skip_confirm_for_simple_edits = true,
+				git = {
+					-- Return true to automatically git add/mv/rm files
+					add = function(path)
+						return false
+					end,
+					mv = function(src_path, dest_path)
+						return true
+					end,
+					rm = function(path)
+						return true
+					end,
+				},
 			})
 
 			-- Open parent directory in floating window
