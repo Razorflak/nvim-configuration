@@ -8,7 +8,7 @@ return {
 	keys = {
 		{
 			"<leader>vrr",
-			"<cmd>Trouble lsp_references open <cr>",
+			"<cmd>Trouble lsp_references open focus <cr>",
 			desc = "Diagnostics (Trouble)",
 		},
 		{
