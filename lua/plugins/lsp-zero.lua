@@ -31,6 +31,12 @@ local function getEslintConfiguration()
 			".eslintrc.json"
 		),
 		single_file_support = false,
+		on_attach = function(client, bufnr)
+			vim.api.nvim_create_autocmd("BufWritePre", {
+				buffer = bufnr,
+				command = "EslintFixAll",
+			})
+		end,
 	}
 	return config
 end
@@ -54,46 +60,57 @@ return {
 		"neovim/nvim-lspconfig",
 		lazy = false,
 		config = function()
-			local capabilities = require("cmp_nvim_lsp").default_capabilities()
-
-			local lspconfig = require("lspconfig")
-			lspconfig.ts_ls.setup({
-				capabilities = capabilities,
-				on_attach = function(_client, buffer)
-					local function goto_source_definition()
-						local position_params = vim.lsp.util.make_position_params()
-						vim.lsp.buf.execute_command({
-							command = "_typescript.goToSourceDefinition",
-							arguments = { vim.api.nvim_buf_get_name(0), position_params.position },
-						})
-					end
-					local opts = { buffer = buffer }
-					vim.keymap.set("n", "gds", goto_source_definition, opts)
-				end,
+			require("mason-lspconfig").setup({
+				ensure_installed = {
+					"lua_ls",
+					"rust_analyzer",
+					"ts_ls",
+				},
 				handlers = {
-					["workspace/executeCommand"] = function(_err, result, ctx, _config)
-						if ctx.params.command ~= "_typescript.goToSourceDefinition" then
-							return
-						end
-						if result == nil or #result == 0 then
-							return
-						end
-						vim.lsp.util.jump_to_location(result[1], "utf-8")
+					function(server_name) -- default handler (optional)
+						require("lspconfig")[server_name].setup({
+							capabilities = capabilities,
+						})
+					end,
+					["eslint"] = function()
+						local lspconfig = require("lspconfig")
+						lspconfig.eslint.setup(getEslintConfiguration())
+					end,
+
+					["biome"] = function()
+						lspconfig.biome.setup(getBiomeConfiguration())
+					end,
+
+					["ts_ls"] = function()
+						local lspconfig = require("lspconfig")
+						lspconfig.ts_ls.setup({
+							capabilities = capabilities,
+							on_attach = function(_client, buffer)
+								local function goto_source_definition()
+									local position_params = vim.lsp.util.make_position_params()
+									vim.lsp.buf.execute_command({
+										command = "_typescript.goToSourceDefinition",
+										arguments = { vim.api.nvim_buf_get_name(0), position_params.position },
+									})
+								end
+								local opts = { buffer = buffer }
+								vim.keymap.set("n", "gds", goto_source_definition, opts)
+							end,
+							handlers = {
+								["workspace/executeCommand"] = function(_err, result, ctx, _config)
+									if ctx.params.command ~= "_typescript.goToSourceDefinition" then
+										return
+									end
+									if result == nil or #result == 0 then
+										return
+									end
+									vim.lsp.util.jump_to_location(result[1], "utf-8")
+								end,
+							},
+						})
 					end,
 				},
 			})
-
-			lspconfig.html.setup({
-				capabilities = capabilities,
-			})
-			lspconfig.lua_ls.setup({
-				capabilities = capabilities,
-			})
-
-			lspconfig.eslint.setup(getEslintConfiguration())
-
-			lspconfig.biome.setup(getBiomeConfiguration())
-
 			vim.keymap.set("n", "gD", vim.lsp.buf.type_definition, opts)
 			vim.keymap.set("n", "gd", function()
 				vim.lsp.buf.definition()
@@ -150,10 +167,10 @@ return {
 
 			-- Fonction pour appeler LspStop et LspStart avec un délai
 			local function lsp_stop_start()
-				vim.cmd("LspRestart")
+				vim.cmd("LspStop")
 				vim.defer_fn(function()
 					vim.cmd("LspStart")
-				end, 100) -- délai de 100 ms
+				end, 500)
 			end
 
 			-- Création de la commande pour arrêter et démarrer le LSP
