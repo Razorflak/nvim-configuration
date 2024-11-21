@@ -1,5 +1,4 @@
 local project_formatters = {
-	{ path = "neomed.git/develop", formatter = "prettier" },
 	{ path = "neomed.git/test-synth", formatter = "prettier" },
 	{ path = "neomed.git/fid-token", formatter = "prettier" },
 	{ path = "neomed.git/fcr-", formatter = "prettier" },
@@ -45,11 +44,11 @@ return {
 				lua = { "stylua" },
 				python = { "isort", "black" },
 			},
-			format_on_save = {
+			--[[ format_on_save = {
 				lsp_fallback = false,
 				async = false,
 				timeout_ms = 3000,
-			},
+			}, ]]
 			notify_on_error = false,
 			log_level = vim.log.levels.DEBUG,
 		})
