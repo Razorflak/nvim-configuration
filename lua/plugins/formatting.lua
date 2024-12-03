@@ -3,8 +3,8 @@ local project_formatters = {
 	{ path = "neomed.git/fid-token", formatter = "prettier" },
 	{ path = "neomed.git/fcr-", formatter = "prettier" },
 	{ path = "neomed.git/neo-331-med19-numberly", formatter = "prettier" },
-	{ path = "stickycom.git", formatter = "eslint_d" },
-	{ path = "neomed.git", formatter = "eslint_d" },
+	{ path = "stickycom.git", formatter = "nil" },
+	{ path = "neomed.git", formatter = nil },
 }
 
 local function escape_pattern(text)
@@ -44,11 +44,11 @@ return {
 				lua = { "stylua" },
 				python = { "isort", "black" },
 			},
-			--[[ format_on_save = {
+			format_on_save = {
 				lsp_fallback = false,
 				async = false,
 				timeout_ms = 3000,
-			}, ]]
+			},
 			notify_on_error = false,
 			log_level = vim.log.levels.DEBUG,
 		})

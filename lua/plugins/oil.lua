@@ -41,7 +41,7 @@ return {
 						return false
 					end,
 					mv = function(src_path, dest_path)
-						return true
+						return false
 					end,
 					rm = function(path)
 						return true
