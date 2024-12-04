@@ -1,33 +1,32 @@
 local IS_DEV = false
 
 local prompts = {
-	-- Code related prompts
-	Explain = "Please explain how the following code works.",
-	Review = "Please review the following code and provide suggestions for improvement.",
-	Tests = "Please explain how the selected code works, then generate unit tests for it.",
-	Refactor = "Please refactor the following code to improve its clarity and readability.",
-	FixCode = "Please fix the following code to make it work as intended.",
-	FixError = "Please explain the error in the following text and provide a solution.",
-	BetterNamings = "Please provide better names for the following variables and functions.",
-	Documentation = "Please provide documentation for the following code.",
-	SwaggerApiDocs = "Please provide documentation for the following API using Swagger.",
-	SwaggerJsDocs = "Please write JSDoc for the following API using Swagger.",
-	-- Text related prompts
-	Summarize = "Please summarize the following text.",
-	Spelling = "Please correct any grammar and spelling errors in the following text.",
-	Wording = "Please improve the grammar and wording of the following text.",
-	Concise = "Please rewrite tphe following text to make it more concise.",
-	Mock = "Please generate a mock object for the selected Typescript type.",
-	MockNoUndefined = "Please genperate a mock object for the selected Typescript type. If a value is optional, fill the object with a value.",
+	-- Prompts liés au code
+	Explain = "Veuillez expliquer comment fonctionne le code suivant.",
+	Review = "Veuillez examiner le code suivant et fournir des suggestions pour l'améliorer.",
+	Tests = "Veuillez expliquer comment fonctionne le code sélectionné, puis générer des tests unitaires pour celui-ci.",
+	Refactor = "Veuillez refactoriser le code suivant pour améliorer sa clarté et sa lisibilité.",
+	FixCode = "Veuillez corriger le code suivant pour qu'il fonctionne comme prévu.",
+	FixError = "Veuillez expliquer l'erreur dans le texte suivant et fournir une solution.",
+	BetterNamings = "Veuillez fournir de meilleurs noms pour les variables et fonctions suivantes.",
+	Documentation = "Veuillez fournir de la documentation pour le code suivant.",
+	SwaggerApiDocs = "Veuillez fournir de la documentation pour l'API suivante en utilisant Swagger.",
+	SwaggerJsDocs = "Veuillez écrire des JSDoc pour l'API suivante en utilisant Swagger.",
+	-- Prompts liés au texte
+	Summarize = "Veuillez résumer le texte suivant.",
+	Spelling = "Veuillez corriger les fautes de grammaire et d'orthographe dans le texte suivant.",
+	Wording = "Veuillez améliorer la grammaire et la formulation du texte suivant.",
+	Concise = "Veuillez réécrire le texte suivant pour le rendre plus concis.",
+	Mock = "Veuillez générer un objet fictif pour le type Typescript sélectionné.",
+	MockNoUndefined = "Veuillez générer un objet fictif pour le type Typescript sélectionné. Si une valeur est optionnelle, remplissez l'objet avec une valeur.",
 }
 
 return {
 	{
 		dir = IS_DEV and "~/Projects/research/CopilotChat.nvim" or nil,
+
 		"CopilotC-Nvim/CopilotChat.nvim",
-		version = "v2.14.0",
-		-- branch = "canary", -- Use the canary branch if you want to test the latest features but it might be unstable
-		-- Do not use branch and version together, either use branch or version
+		version = "v3.3.1",
 		dependencies = {
 			{ "nvim-telescope/telescope.nvim" }, -- Use telescope for help actions
 			{ "nvim-lua/plenary.nvim" },
@@ -74,11 +73,11 @@ return {
 					normal = "gmd",
 				},
 				-- Show the prompt
-				show_system_prompt = {
+				show_info = {
 					normal = "gmp",
 				},
 				-- Show the user selection
-				show_user_selection = {
+				show_context = {
 					normal = "gms",
 				},
 			},
