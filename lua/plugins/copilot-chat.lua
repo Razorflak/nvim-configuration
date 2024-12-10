@@ -57,7 +57,7 @@ return {
 				-- Submit the prompt to Copilot
 				submit_prompt = {
 					normal = "<CR>",
-					insert = "<C-CR>",
+					insert = "<C-s>",
 				},
 				-- Accept the diff
 				accept_diff = {
@@ -66,19 +66,18 @@ return {
 				},
 				-- Yank the diff in the response to register
 				yank_diff = {
-					normal = "gmy",
+					normal = "<leader>cy",
 				},
 				-- Show the diff
 				show_diff = {
-					normal = "gmd",
+					normal = "<leader>cd",
 				},
 				-- Show the prompt
 				show_info = {
 					normal = "gmp",
 				},
-				-- Show the user selection
 				show_context = {
-					normal = "gms",
+					normal = "<leader>cx",
 				},
 			},
 		},
