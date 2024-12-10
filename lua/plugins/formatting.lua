@@ -5,6 +5,7 @@ local project_formatters = {
 	{ path = "neomed.git/neo-331-med19-numberly", formatter = "prettier" },
 	{ path = "stickycom.git", formatter = "nil" },
 	{ path = "neomed.git", formatter = nil },
+	{ path = "stickureuil.git", formatter = nil },
 }
 
 local function escape_pattern(text)

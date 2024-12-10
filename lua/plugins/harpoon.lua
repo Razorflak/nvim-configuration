@@ -3,7 +3,10 @@ return {
 	branch = "harpoon2",
 	dependencies = { "nvim-lua/plenary.nvim" },
 	config = function()
-		require("harpoon"):setup()
+		require("harpoon"):setup({ settings = {
+			sync_on_ui_close = true,
+			save_on_toggle = true,
+		} })
 	end,
 	keys = {
 		{
