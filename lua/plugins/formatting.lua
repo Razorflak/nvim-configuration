@@ -3,9 +3,9 @@ local project_formatters = {
 	{ path = "neomed.git/fid-token", formatter = "prettier" },
 	{ path = "neomed.git/fcr-", formatter = "prettier" },
 	{ path = "neomed.git/neo-331-med19-numberly", formatter = "prettier" },
-	{ path = "stickycom.git", formatter = "nil" },
-	{ path = "neomed.git", formatter = nil },
-	{ path = "stickureuil.git", formatter = nil },
+	{ path = "stickycom.git", formatter = "eslint_d" },
+	{ path = "neomed.git", formatter = "eslint_d" },
+	{ path = "stickureuil.git", formatter = "eslint_d" },
 }
 
 local function escape_pattern(text)

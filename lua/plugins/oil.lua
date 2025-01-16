@@ -7,6 +7,7 @@ return {
 				use_default_keymaps = false,
 				default_file_explorer = true,
 				watch_for_changes = true,
+				delete_to_trash = true,
 				columns = {
 					"icon",
 					"permissions",
@@ -29,7 +30,7 @@ return {
 					["gs"] = "actions.change_sort",
 					["gx"] = "actions.open_external",
 					["g."] = "actions.toggle_hidden",
-					["g\\"] = "actions.toggle_trash",
+					["gt"] = "actions.toggle_trash",
 				},
 				view_options = {
 					show_hidden = true,
@@ -44,7 +45,7 @@ return {
 						return false
 					end,
 					rm = function(path)
-						return true
+						return false
 					end,
 				},
 			})

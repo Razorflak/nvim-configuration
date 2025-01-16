@@ -8,12 +8,17 @@ return {
 	keys = {
 		{
 			"<leader>vrr",
-			"<cmd>Trouble lsp_references open <cr>",
+			"<cmd>Trouble lsp_references open focus=true follow=false <cr>",
 			desc = "Diagnostics (Trouble)",
 		},
 		{
 			"<leader>vre",
 			"<cmd>Trouble lsp open focus=true<cr>",
+			desc = "Buffer Diagnostics (Trouble)",
+		},
+		{
+			"<leader>tq",
+			"<cmd>lua require('trouble').close()<cr>",
 			desc = "Buffer Diagnostics (Trouble)",
 		},
 		{

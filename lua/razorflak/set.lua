@@ -27,10 +27,13 @@ vim.opt.isfname:append("@-@")
 
 vim.opt.updatetime = 50
 vim.opt.guicursor = {
-  'n-v-c:block-Cursor/lCursor-blinkwait1000-blinkon100-blinkoff100',
-  'i-ci:ver25-Cursor/lCursor-blinkwait1000-blinkon100-blinkoff100',
-  'r:hor50-Cursor/lCursor-blinkwait100-blinkon100-blinkoff100'
+	"n-v-c:block-Cursor/lCursor-blinkwait1000-blinkon100-blinkoff100",
+	"i-ci:ver25-Cursor/lCursor-blinkwait1000-blinkon100-blinkoff100",
+	"r:hor50-Cursor/lCursor-blinkwait100-blinkon100-blinkoff100",
 }
 
 local set = vim.opt -- set options
-set.fillchars = set.fillchars + 'diff: '
+set.fillchars = set.fillchars + "diff: "
+
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
