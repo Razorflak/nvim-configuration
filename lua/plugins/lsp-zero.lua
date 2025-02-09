@@ -74,11 +74,11 @@ return {
 					end,
 					["eslint"] = function()
 						local lspconfig = require("lspconfig")
-						lspconfig.eslint.setup(getEslintConfiguration())
+						require("lspconfig").eslint.setup(getEslintConfiguration())
 					end,
 
 					["biome"] = function()
-						lspconfig.biome.setup(getBiomeConfiguration())
+						require("lspconfig").biome.setup(getBiomeConfiguration())
 					end,
 
 					["ts_ls"] = function()

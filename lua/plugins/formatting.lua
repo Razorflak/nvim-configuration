@@ -6,12 +6,13 @@ local project_formatters = {
 	{ path = "stickycom.git", formatter = "eslint_d" },
 	{ path = "neomed.git", formatter = "prettier" },
 	{ path = "kadokajo", formatter = "eslint_d" },
+	{ path = "darts-scorer-v2", formatter = "biome" },
 }
 
 local function get_formatter(default_formatter)
 	local root_dir = vim.fn.getcwd()
 	for _, project in ipairs(project_formatters) do
-		if string.find(root_dir, project.path) then
+		if string.find(root_dir, string.gsub(project.path, "([^%w])", "%%%1")) then
 			return { project.formatter }
 		end
 	end
@@ -34,18 +35,18 @@ return {
 				svelte = { "prettier" },
 				css = { "prettier" },
 				html = { "prettier" },
-				json = { "prettier" },
+				json = { "biome" },
 				yaml = { "prettier" },
 				markdown = { "prettier" },
 				graphql = { "prettier" },
 				lua = { "stylua" },
 				python = { "isort", "black" },
 			},
-			--[[ format_on_save = {
+			format_on_save = {
 				lsp_fallback = false,
 				async = false,
 				timeout_ms = 3000,
-			}, ]]
+			},
 			notify_on_error = false,
 			log_level = vim.log.levels.DEBUG,
 		})

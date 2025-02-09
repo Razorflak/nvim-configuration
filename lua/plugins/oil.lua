@@ -7,6 +7,7 @@ return {
 				use_default_keymaps = false,
 				default_file_explorer = true,
 				watch_for_changes = true,
+				delete_to_trash = true,
 				columns = {
 					"icon",
 					"permissions",
