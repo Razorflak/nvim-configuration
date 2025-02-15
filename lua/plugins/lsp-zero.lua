@@ -70,6 +70,7 @@ return {
 					end,
 
 					["biome"] = function()
+						local lspconfig = require("lspconfig")
 						lspconfig.biome.setup(getBiomeConfiguration())
 					end,
 
