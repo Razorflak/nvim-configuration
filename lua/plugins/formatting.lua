@@ -6,6 +6,8 @@ local project_formatters = {
 	{ path = "stickycom.git", formatter = "eslint_d" },
 	{ path = "neomed.git", formatter = "eslint_d" },
 	{ path = "stickureuil.git", formatter = "eslint_d" },
+	{ path = "darts-scorer-v2/packages/front-end-v2", formatter = "prettier" },
+	{ path = "darts-scorer-v2", formatter = "biome" },
 }
 
 local function escape_pattern(text)
@@ -13,7 +15,7 @@ local function escape_pattern(text)
 end
 
 local function get_formatter(default_formatter)
-	local root_dir = vim.fn.getcwd()
+	local root_dir = vim.fn.getcwd() .. "/" .. vim.fn.expand("%")
 	for i, project in ipairs(project_formatters) do
 		if string.match(root_dir, escape_pattern(project.path)) then
 			return { project.formatter }

@@ -26,7 +26,8 @@ local function getEslintConfiguration()
 			".eslintrc.cjs",
 			".eslintrc.yaml",
 			".eslintrc.yml",
-			".eslintrc.json"
+			".eslintrc.json",
+			"eslint.config.js"
 		),
 		single_file_support = false,
 	}
