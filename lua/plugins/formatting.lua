@@ -40,7 +40,9 @@ return {
 				svelte = { "prettier" },
 				css = { "prettier" },
 				html = { "prettier" },
-				json = { "prettier" },
+				json = function()
+					return get_formatter("prettier")
+				end,
 				yaml = { "prettier" },
 				markdown = { "prettier" },
 				graphql = { "prettier" },

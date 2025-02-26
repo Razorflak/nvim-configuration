@@ -19,7 +19,7 @@ return {
 		local adapters = {
 			require("neotest-vitest")({
 				vitestCommand = function()
-					return "pnpx vitest run"
+					return "pnpx vitest@2.1.4 run"
 				end,
 				vitestConfigFile = function(file)
 					if string.find(file, "/packages/") then
@@ -82,6 +82,7 @@ return {
 		})
 	end,
 
+	event = "VeryLazy",
 	keys = {
 		{
 			"<leader>tt",
