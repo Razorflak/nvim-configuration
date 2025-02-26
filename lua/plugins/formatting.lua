@@ -6,6 +6,7 @@ local project_formatters = {
 	{ path = "stickycom.git", formatter = "eslint_d" },
 	{ path = "neomed.git", formatter = "eslint_d" },
 	{ path = "stickureuil.git", formatter = "eslint_d" },
+	{ path = "darts-scorer-v2", formatter = "biome" },
 }
 
 local function escape_pattern(text)
@@ -38,7 +39,9 @@ return {
 				svelte = { "prettier" },
 				css = { "prettier" },
 				html = { "prettier" },
-				json = { "prettier" },
+				json = function()
+					return get_formatter("prettier")
+				end,
 				yaml = { "prettier" },
 				markdown = { "prettier" },
 				graphql = { "prettier" },
