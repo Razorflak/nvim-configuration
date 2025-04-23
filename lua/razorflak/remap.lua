@@ -70,3 +70,6 @@ vim.keymap.set("n", "<A-h>", ":vertical resize -1<CR>", { noremap = true, silent
 -- Redimensionner verticalement
 vim.keymap.set("n", "<A-k>", ":resize +1<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<A-j>", ":resize -1<CR>", { noremap = true, silent = true })
+
+-- Déactive la surbrillance de recherche quand on appuis sur Esc
+vim.api.nvim_set_keymap("n", "<Esc>", ":noh<CR>", { noremap = true, silent = true })

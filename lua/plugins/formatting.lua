@@ -43,7 +43,7 @@ return {
 					return get_formatter("prettier")
 				end,
 				yaml = { "prettier" },
-				markdown = { "prettier" },
+				markdown = nil,
 				graphql = { "prettier" },
 				lua = { "stylua" },
 				python = { "isort", "black" },

@@ -35,6 +35,9 @@ return {
 				view_options = {
 					show_hidden = true,
 				},
+				win_options = {
+					winbar = "%#@attribute.builtin#%{substitute(v:lua.require('oil').get_current_dir(), '^' . $HOME, '~', '')}",
+				},
 				skip_confirm_for_simple_edits = true,
 				git = {
 					-- Return true to automatically git add/mv/rm files

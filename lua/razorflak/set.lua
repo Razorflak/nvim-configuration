@@ -16,7 +16,7 @@ vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.undofile = true
 
-vim.opt.hlsearch = false
+vim.opt.hlsearch = true
 vim.opt.incsearch = true
 
 vim.opt.termguicolors = true
@@ -37,3 +37,5 @@ set.fillchars = set.fillchars + "diff: "
 
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
+
+vim.opt.conceallevel = 1

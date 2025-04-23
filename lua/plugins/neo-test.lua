@@ -1,3 +1,12 @@
+local function detect_test_suite(file)
+	if file:match("%.spec%.ts$") then
+		return "unit"
+	elseif file:match("%.test%.ts$") then
+		return "integration"
+	end
+	return "unit" -- Par défaut, on considère que c'est unitaire
+end
+
 return {
 	"nvim-neotest/neotest",
 	dependencies = {
@@ -17,7 +26,7 @@ return {
 	end,
 	config = function()
 		local adapters = {
-			require("neotest-vitest")({
+			--[[ require("neotest-vitest")({
 				vitestCommand = function()
 					return "pnpx vitest@2.1.4 run"
 				end,
@@ -34,7 +43,7 @@ return {
 					end
 					return vim.fn.getcwd()
 				end,
-			}),
+			}), ]]
 			--[[ require("neotest-jest")({
 				jestCommand = "pnpx jest ", -- Adapt this command if needed
 				jestConfigFile = function(file)
@@ -53,16 +62,19 @@ return {
 				end,
 			}), ]]
 			--Sticky back
-			--[[ require("neotest-jest")({
+			require("neotest-jest")({
 				jestCommand = "pnpx jest ", -- Adapt this command if needed
+				env = { TEST_SUITE = "integ" },
 				jestConfigFile = function(file)
-					print("init jest", file)
-					if string.find(file, "/endpoints/") then
-						print("jestfile", string.match(file, "(.-/[^/]+/)src") .. "jest.config.js")
-						return string.match(file, "(.-/[^/]+/)src") .. "jest.config.js"
+					local ok, util = pcall(require, "lspconfig.util")
+					if not ok then
+						vim.notify("lspconfig.util could not be loaded")
+						return
 					end
-					print("pas trouvé", vim.fn.getcwd() .. "/jest.config.js")
-					return vim.fn.getcwd() .. "/jest.config.js"
+
+					local jestConfig = util.root_pattern("jest.config.js")(file)
+					print("jest config used", jestConfig .. "/jest.config.js")
+					return jestConfig .. "/jest.config.js"
 				end,
 				cwd = function(path)
 					print(path, "CWD Jest")
@@ -71,7 +83,7 @@ return {
 					end
 					return vim.fn.getcwd()
 				end,
-			}), ]]
+			}),
 		}
 		require("neotest").setup({
 			output_panel = {
