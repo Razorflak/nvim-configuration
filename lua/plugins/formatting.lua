@@ -8,6 +8,7 @@ local project_formatters = {
 	{ path = "stickureuil.git", formatter = "eslint_d" },
 	{ path = "darts-scorer-v2/packages/front-end-v2", formatter = "prettier" },
 	{ path = "darts-scorer-v2", formatter = "biome" },
+	{ path = "darts-flow", formatter = "biome" },
 }
 
 local function escape_pattern(text)

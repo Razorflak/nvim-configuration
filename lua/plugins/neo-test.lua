@@ -19,7 +19,7 @@ return {
 		local adapters = {
 			require("neotest-vitest")({
 				vitestCommand = function()
-					return "pnpx vitest@2.1.4 run"
+					return "pnpx vitest@3.0.0 run"
 				end,
 				vitestConfigFile = function(file)
 					if string.find(file, "/packages/") then
