@@ -2,25 +2,23 @@ local function getBiomeConfiguration()
 	local ok, util = pcall(require, "lspconfig.util")
 	if not ok then
 		vim.notify("lspconfig.util could not be loaded")
-		return
+		return {}
 	end
 
-	local config = {
+	return {
 		root_dir = util.root_pattern("biome.json"),
 		single_file_support = false,
 	}
-
-	return config
 end
 
 local function getEslintConfiguration()
 	local ok, util = pcall(require, "lspconfig.util")
 	if not ok then
 		vim.notify("lspconfig.util could not be loaded")
-		return
+		return {}
 	end
 
-	local config = {
+	return {
 		root_dir = util.root_pattern(
 			".eslintrc.js",
 			".eslintrc.cjs",
@@ -30,7 +28,6 @@ local function getEslintConfiguration()
 		),
 		single_file_support = false,
 	}
-	return config
 end
 
 return {
@@ -42,69 +39,57 @@ return {
 		end,
 	},
 	{
-		"williamboman/mason-lspconfig.nvim",
-		lazy = false,
-		opts = {
-			auto_install = true,
-		},
-	},
-	{
 		"neovim/nvim-lspconfig",
 		lazy = false,
 		config = function()
-			require("mason-lspconfig").setup({
-				ensure_installed = {
-					"lua_ls",
-					"rust_analyzer",
-					"ts_ls",
-				},
+			local capabilities = vim.lsp.protocol.make_client_capabilities()
+
+			local lspconfig = require("lspconfig")
+
+			-- Config Biome
+			lspconfig.biome.setup(getBiomeConfiguration())
+
+			-- Config ESLint
+			lspconfig.eslint.setup(getEslintConfiguration())
+
+			-- Config TS Server (typescript-language-server dans Mason)
+			lspconfig.ts_ls.setup({
+				capabilities = capabilities,
+				on_attach = function(client, bufnr)
+					vim.notify("tsserver attached")
+					local function goto_source_definition()
+						local params = vim.lsp.util.make_position_params()
+						vim.lsp.buf.execute_command({
+							command = "_typescript.goToSourceDefinition",
+							arguments = { vim.api.nvim_buf_get_name(0), params.position },
+						})
+					end
+					vim.keymap.set("n", "gds", goto_source_definition, { buffer = bufnr })
+				end,
 				handlers = {
-					function(server_name) -- default handler (optional)
-						require("lspconfig")[server_name].setup({
-							capabilities = capabilities,
-						})
-					end,
-					["eslint"] = function()
-						local lspconfig = require("lspconfig")
-						lspconfig.eslint.setup(getEslintConfiguration())
-					end,
-
-					["biome"] = function()
-						local lspconfig = require("lspconfig")
-						lspconfig.biome.setup(getBiomeConfiguration())
-					end,
-
-					["ts_ls"] = function()
-						local lspconfig = require("lspconfig")
-						lspconfig.ts_ls.setup({
-							capabilities = capabilities,
-							on_attach = function(_client, buffer)
-								local function goto_source_definition()
-									local position_params = vim.lsp.util.make_position_params()
-									vim.lsp.buf.execute_command({
-										command = "_typescript.goToSourceDefinition",
-										arguments = { vim.api.nvim_buf_get_name(0), position_params.position },
-									})
-								end
-								local opts = { buffer = buffer }
-								vim.keymap.set("n", "gds", goto_source_definition, opts)
-							end,
-							handlers = {
-								["workspace/executeCommand"] = function(_err, result, ctx, _config)
-									if ctx.params.command ~= "_typescript.goToSourceDefinition" then
-										return
-									end
-									if result == nil or #result == 0 then
-										return
-									end
-									vim.lsp.util.jump_to_location(result[1], "utf-8")
-								end,
-							},
-						})
+					["workspace/executeCommand"] = function(err, result, ctx)
+						if ctx.params.command ~= "_typescript.goToSourceDefinition" then
+							return
+						end
+						if result and #result > 0 then
+							vim.lsp.util.jump_to_location(result[1], "utf-8")
+						end
 					end,
 				},
 			})
-			vim.keymap.set("n", "gD", vim.lsp.buf.type_definition, opts)
+
+			-- Config Lua LS
+			lspconfig.lua_ls.setup({
+				capabilities = capabilities,
+			})
+
+			-- Config Rust Analyzer
+			lspconfig.rust_analyzer.setup({
+				capabilities = capabilities,
+			})
+
+			-- Keymaps
+			vim.keymap.set("n", "gD", vim.lsp.buf.type_definition, {})
 			vim.keymap.set("n", "gd", function()
 				vim.lsp.buf.definition()
 				vim.defer_fn(function()
@@ -125,49 +110,32 @@ return {
 					vim.api.nvim_input("zz")
 				end, 100)
 			end, {})
-			--
-			-- Remap for lsp actions
-			vim.keymap.set("n", "K", function()
-				vim.lsp.buf.hover()
-			end, {})
-			vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
 
+			-- Hover
+			vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
 			vim.lsp.handlers["textDocument/signatureHelp"] =
 				vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
 
-			vim.keymap.set("n", "<leader>vws", function()
-				vim.lsp.buf.workspace_symbol()
-			end, {})
-			vim.keymap.set("n", "<leader>vd", function()
-				vim.diagnostic.open_float()
-			end, {})
-			vim.keymap.set("n", "<leader>ee", function()
-				vim.diagnostic.goto_next()
-			end, {})
-			vim.keymap.set("n", "<leader>ez", function()
-				vim.diagnostic.goto_prev()
-			end, {})
-			vim.keymap.set("n", "<leader>vca", function()
-				vim.lsp.buf.code_action()
-			end, {})
-			vim.keymap.set("n", "<leader>vrn", function()
-				vim.lsp.buf.rename()
-			end, {})
-			vim.keymap.set("i", "<C-h>", function()
-				vim.lsp.buf.signature_help()
-			end, {})
+			-- Diagnostics et code actions
+			vim.keymap.set("n", "<leader>vws", vim.lsp.buf.workspace_symbol, {})
+			vim.keymap.set("n", "<leader>vd", vim.diagnostic.open_float, {})
+			vim.keymap.set("n", "<leader>ee", vim.diagnostic.goto_next, {})
+			vim.keymap.set("n", "<leader>ez", vim.diagnostic.goto_prev, {})
+			vim.keymap.set("n", "<leader>vca", vim.lsp.buf.code_action, {})
+			vim.keymap.set("n", "<leader>vrn", vim.lsp.buf.rename, {})
+			vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help, {})
 			vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
 
-			-- Fonction pour appeler LspStop et LspStart avec un délai
-			local function lsp_stop_start()
+			-- Diagnostics
+			vim.diagnostic.config({ virtual_lines = { current_line = true } })
+
+			-- Commande pour redémarrer LSP
+			vim.api.nvim_create_user_command("LspStopStart", function()
 				vim.cmd("LspStop")
 				vim.defer_fn(function()
 					vim.cmd("LspStart")
 				end, 500)
-			end
-
-			-- Création de la commande pour arrêter et démarrer le LSP
-			vim.api.nvim_create_user_command("LspStopStart", lsp_stop_start, { nargs = 0 })
+			end, {})
 		end,
 	},
 }
