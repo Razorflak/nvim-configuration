@@ -1,3 +1,4 @@
+local obsidian_notes = "/Users/julien_tanguy2/Google Drive/Mon Drive/Obsidian-vault/work"
 return {
 	"epwalsh/obsidian.nvim",
 	version = "*", -- recommended, use latest release instead of latest commit
@@ -145,6 +146,13 @@ return {
 				end,
 				opts = { buffer = true },
 			},
+			--Créer une nouvelle note from template
+			["<leader>nn"] = {
+				action = function()
+					vim.cmd("ObsidianNewFromTemplate")
+				end,
+				opts = { buffer = true },
+			},
 			-- Ouvre la note du jour
 			["<leader>nft"] = {
 				action = function()
@@ -158,6 +166,23 @@ return {
 					vim.cmd("ObsidianTemplate")
 				end,
 				opts = { buffer = true },
+			},
+			["<leader>nk"] = {
+				action = function()
+					local current_file = vim.fn.expand("%:p")
+					local target_dir = obsidian_notes .. "/tomove"
+					vim.cmd("silent! !mv '" .. current_file .. "' '" .. target_dir .. "'")
+					vim.cmd("bd!")
+				end,
+				desc = "Déplacer la note courante dans 'tomove'",
+			},
+			["<leader>ndd"] = {
+				action = function()
+					local current_file = vim.fn.expand("%:p")
+					vim.cmd("silent! !rm -f '" .. current_file .. "'")
+					vim.cmd("bd!")
+				end,
+				desc = "Supprimer la note courante",
 			},
 		},
 		-- Optional, by default when you use `:ObsidianFollowLink` on a link to an external

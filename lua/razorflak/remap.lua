@@ -79,21 +79,6 @@ vim.api.nvim_set_keymap("n", "<Esc>", ":noh<CR>", { noremap = true, silent = tru
 -- 📁 Répertoire principal de tes notes Obsidian
 local obsidian_notes = "/Users/julien_tanguy2/Google Drive/Mon Drive/Obsidian-vault/work"
 
--- 📦 Déplacer la note courante dans le dossier "tomove"
-vim.keymap.set("n", "<leader>nk", function()
-	local current_file = vim.fn.expand("%:p")
-	local target_dir = obsidian_notes .. "/tomove"
-	vim.cmd("silent! !mv '" .. current_file .. "' '" .. target_dir .. "'")
-	vim.cmd("bd!")
-end)
-
--- 🗑️ Supprimer le fichier courant sans confirmation
-vim.keymap.set("n", "<leader>ndd", function()
-	local current_file = vim.fn.expand("%:p")
-	vim.cmd("silent! !rm -f '" .. current_file .. "'")
-	vim.cmd("bd!")
-end)
-
 -- 🔍 Rechercher un fichier dans les notes
 vim.keymap.set("n", "<leader>nfs", function()
 	require("telescope.builtin").find_files({
