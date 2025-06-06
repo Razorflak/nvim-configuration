@@ -74,6 +74,9 @@ vim.keymap.set("n", "<A-j>", ":resize -1<CR>", { noremap = true, silent = true }
 -- Déactive la surbrillance de recherche quand on appuis sur Esc
 vim.api.nvim_set_keymap("n", "<Esc>", ":noh<CR>", { noremap = true, silent = true })
 
+-- Mappe <leader>y pour copier le chemin absolu du fichier courant dans le clipboard système
+vim.api.nvim_set_keymap("n", "<leader>z", [[:let @+ = expand('%:p')<CR>]], { noremap = true, silent = true })
+
 -- Obsidian
 --
 -- 📁 Répertoire principal de tes notes Obsidian

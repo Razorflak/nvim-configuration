@@ -1,4 +1,8 @@
-local obsidian_notes = "/Users/julien_tanguy2/Google Drive/Mon Drive/Obsidian-vault/work"
+local obsidian_notes = os.getenv("JTA_OBSIDIAN_REPO")
+-- Si la variable d'environnement n'existe pas, on ne charge pas le plugin.
+if not obsidian_notes then
+	return {}
+end
 return {
 	"epwalsh/obsidian.nvim",
 	version = "*", -- recommended, use latest release instead of latest commit
