@@ -27,7 +27,7 @@ return {
 		workspaces = {
 			{
 				name = "work",
-				path = "/Users/julien_tanguy2/Google Drive/Mon Drive/Obsidian-vault/work",
+				path = obsidian_notes .. "/work",
 				overrides = {
 					notes_subdir = "inbox",
 				},

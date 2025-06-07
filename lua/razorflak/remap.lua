@@ -80,7 +80,7 @@ vim.api.nvim_set_keymap("n", "<leader>z", [[:let @+ = expand('%:p')<CR>]], { nor
 -- Obsidian
 --
 -- 📁 Répertoire principal de tes notes Obsidian
-local obsidian_notes = "/Users/julien_tanguy2/Google Drive/Mon Drive/Obsidian-vault/work"
+local obsidian_notes = os.getenv("JTA_OBSIDIAN_REPO") .. "/work"
 
 -- 🔍 Rechercher un fichier dans les notes
 vim.keymap.set("n", "<leader>nfs", function()
