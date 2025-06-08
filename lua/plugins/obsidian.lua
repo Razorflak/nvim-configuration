@@ -32,10 +32,6 @@ return {
 					notes_subdir = "inbox",
 				},
 			},
-			{
-				name = "personal",
-				path = "~/vaults/personal",
-			},
 		},
 		picker = {
 			-- Set your preferred picker. Can be one of 'telescope.nvim', 'fzf-lua', or 'mini.pick'.

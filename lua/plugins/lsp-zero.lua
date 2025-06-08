@@ -88,6 +88,15 @@ return {
 				capabilities = capabilities,
 			})
 
+			-- Config Svelte LS
+			lspconfig.svelte.setup({
+				capabilities = capabilities,
+				on_attach = function(client, bufnr)
+					vim.notify("Svelte LSP attached")
+					-- Ajoutez vos keymaps ou autres configurations spécifiques ici
+				end,
+			})
+
 			-- Keymaps
 			vim.keymap.set("n", "gD", vim.lsp.buf.type_definition, {})
 			vim.keymap.set("n", "gd", function()
@@ -127,7 +136,7 @@ return {
 			vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
 
 			-- Diagnostics
-			vim.diagnostic.config({ virtual_lines = { current_line = true } })
+			vim.diagnostic.config({ virtual_text = { current_line = true } })
 
 			-- Commande pour redémarrer LSP
 			vim.api.nvim_create_user_command("LspStopStart", function()
