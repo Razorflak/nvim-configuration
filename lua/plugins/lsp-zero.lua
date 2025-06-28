@@ -4,8 +4,6 @@ local function getBiomeConfiguration()
 		vim.notify("lspconfig.util could not be loaded")
 		return {}
 	end
-
-	vim.notify("jta biome")
 	return {
 		root_dir = util.root_pattern("biome.jsonc"),
 		single_file_support = false,
@@ -57,7 +55,6 @@ return {
 			lspconfig.ts_ls.setup({
 				capabilities = capabilities,
 				on_attach = function(client, bufnr)
-					vim.notify("tsserver attached")
 					local function goto_source_definition()
 						local params = vim.lsp.util.make_position_params()
 						vim.lsp.buf.execute_command({
@@ -97,7 +94,6 @@ return {
 			lspconfig.svelte.setup({
 				capabilities = capabilities,
 				on_attach = function(client, bufnr)
-					vim.notify("Svelte LSP attached")
 					-- Ajoutez vos keymaps ou autres configurations spécifiques ici
 				end,
 			})

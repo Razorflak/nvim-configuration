@@ -6,7 +6,7 @@ local project_formatters = {
 	{ path = "stickycom.git", formatter = "eslint_d" },
 	{ path = "neomed.git", formatter = "eslint_d" },
 	{ path = "stickureuil.git", formatter = "eslint_d" },
-	{ path = "darts-scorer-v2", formatter = "biome" },
+	{ path = "darts-scorer-v2", formatter = "biome-check" },
 	{ path = "midv2.git", formatter = "biome-check" },
 }
 
