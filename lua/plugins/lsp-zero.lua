@@ -84,6 +84,10 @@ return {
 				capabilities = capabilities,
 			})
 
+			lspconfig.tailwindcss.setup({
+				capabilities = capabilities,
+			})
+
 			-- Config Rust Analyzer
 			lspconfig.rust_analyzer.setup({
 				capabilities = capabilities,

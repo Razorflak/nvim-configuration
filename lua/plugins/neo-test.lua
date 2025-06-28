@@ -1,3 +1,12 @@
+local function detect_test_suite(file)
+	if file:match("%.spec%.ts$") then
+		return "unit"
+	elseif file:match("%.test%.ts$") then
+		return "integration"
+	end
+	return "unit" -- Par défaut, on considère que c'est unitaire
+end
+
 return {
 	"nvim-neotest/neotest",
 	dependencies = {
@@ -84,6 +93,8 @@ return {
 			adapters = adapters,
 		})
 	end,
+
+	event = "VeryLazy",
 	keys = {
 		{
 			"<leader>tt",
