@@ -170,7 +170,7 @@ return {
 			["<leader>nk"] = {
 				action = function()
 					local current_file = vim.fn.expand("%:p")
-					local target_dir = obsidian_notes .. "/tomove"
+					local target_dir = obsidian_notes .. "/work/tomove/"
 					vim.cmd("silent! !mv '" .. current_file .. "' '" .. target_dir .. "'")
 					vim.cmd("bd!")
 				end,

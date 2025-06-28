@@ -16,15 +16,22 @@ return {
 	},
 
 	"christoomey/vim-tmux-navigator",
-	"theprimeagen/refactoring.nvim",
-	"mbbill/undotree",
-	"tpope/vim-fugitive",
+	{
+		"theprimeagen/refactoring.nvim",
+		lazy = true,
+		cmd = { "Refactor", "RefactorExtract", "RefactorInline" }, -- Liste des commandes spécifiques
+	},
+	{ "mbbill/undotree" },
+	{
+		"tpope/vim-fugitive",
+		lazy = true,
+		cmd = { "Git", "Gstatus", "Gcommit", "Gpush", "Gpull" }, -- Liste des commandes qui déclenchent le chargement
+	},
 	"nvim-treesitter/nvim-treesitter-context",
-	"eandrju/cellular-automaton.nvim",
 	{
 		"danymat/neogen",
 		config = true,
-		event = "VeryLazy",
+		lazy = false,
 		-- Uncomment next line if you want to follow only stable versions
 		-- version = "*"
 	},

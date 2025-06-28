@@ -139,7 +139,6 @@ return {
 				end,
 			})
 		end,
-		event = "VeryLazy",
 		keys = {
 			{
 				"<leader>ccp",

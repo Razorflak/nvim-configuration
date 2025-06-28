@@ -5,8 +5,9 @@ local function getBiomeConfiguration()
 		return {}
 	end
 
+	vim.notify("jta biome")
 	return {
-		root_dir = util.root_pattern("biome.json"),
+		root_dir = util.root_pattern("biome.jsonc"),
 		single_file_support = false,
 	}
 end

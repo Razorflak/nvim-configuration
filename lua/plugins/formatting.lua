@@ -7,6 +7,7 @@ local project_formatters = {
 	{ path = "neomed.git", formatter = "eslint_d" },
 	{ path = "stickureuil.git", formatter = "eslint_d" },
 	{ path = "darts-scorer-v2", formatter = "biome" },
+	{ path = "midv2.git", formatter = "biome-check" },
 }
 
 local function escape_pattern(text)
