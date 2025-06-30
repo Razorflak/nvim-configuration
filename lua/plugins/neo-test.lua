@@ -118,6 +118,13 @@ return {
 			desc = "Run Nearest Test",
 		},
 		{
+			"<leader>td",
+			function()
+				require("neotest").run.run({ strategy = "dap" })
+			end,
+			desc = "Run Debug Test",
+		},
+		{
 			"<leader>ts",
 			function()
 				require("neotest").summary.toggle()

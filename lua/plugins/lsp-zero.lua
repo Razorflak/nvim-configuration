@@ -38,6 +38,13 @@ return {
 		end,
 	},
 	{
+		"mfussenegger/nvim-dap",
+		lazy = false,
+		config = function()
+			require("mason-nvim-dap").setup()
+		end,
+	},
+	{
 		"neovim/nvim-lspconfig",
 		lazy = false,
 		config = function()
