@@ -70,6 +70,14 @@ return {
 						})
 					end
 					vim.keymap.set("n", "gds", goto_source_definition, { buffer = bufnr })
+
+					local lsp_signature = require("lsp_signature")
+					lsp_signature.on_attach({
+						bind = true,
+						handler_opts = {
+							border = "rounded",
+						},
+					}, bufnr)
 				end,
 				handlers = {
 					["workspace/executeCommand"] = function(err, result, ctx)
