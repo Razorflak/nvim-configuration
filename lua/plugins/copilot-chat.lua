@@ -25,6 +25,7 @@ return {
 	{
 		dir = IS_DEV and "~/Projects/research/CopilotChat.nvim" or nil,
 
+		lazy = true,
 		"CopilotC-Nvim/CopilotChat.nvim",
 		version = "v3.3.1",
 		dependencies = {

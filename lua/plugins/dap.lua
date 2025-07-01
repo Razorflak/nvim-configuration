@@ -3,7 +3,7 @@ return {
 		"mfussenegger/nvim-dap",
 		recommended = true,
 		desc = "Debugging support. Requires language specific adapters to be configured. (see lang extras)",
-
+		event = "VeryLazy",
 		dependencies = {
 			"rcarriga/nvim-dap-ui",
 			-- virtual text for the debugger
@@ -13,26 +13,26 @@ return {
 			},
 		},
 
-  -- stylua: ignore
-  keys = {
-    { "<leader>jB", function() require("dap").set_breakpoint(vim.fn.input('Breakpoint condition: ')) end, desc = "Breakpoint Condition" },
-    { "<leader>jb", function() require("dap").toggle_breakpoint() end, desc = "Toggle Breakpoint" },
-    { "<leader>jc", function() require("dap").continue() end, desc = "Run/Continue" },
-    { "<leader>ja", function() require("dap").continue({ before = get_args }) end, desc = "Run with Args" },
-    { "<leader>jC", function() require("dap").run_to_cursor() end, desc = "Run to Cursor" },
-    { "<leader>jg", function() require("dap").goto_() end, desc = "Go to Line (No Execute)" },
-    { "<leader>ji", function() require("dap").step_into() end, desc = "Step Into" },
-    { "<leader>jj", function() require("dap").down() end, desc = "Down" },
-    { "<leader>jk", function() require("dap").up() end, desc = "Up" },
-    { "<leader>jl", function() require("dap").run_last() end, desc = "Run Last" },
-    { "<leader>jo", function() require("dap").step_out() end, desc = "Step Out" },
-    { "<leader>jO", function() require("dap").step_over() end, desc = "Step Over" },
-    { "<leader>jP", function() require("dap").pause() end, desc = "Pause" },
-    { "<leader>jr", function() require("dap").repl.toggle() end, desc = "Toggle REPL" },
-    { "<leader>js", function() require("dap").session() end, desc = "Session" },
-    { "<leader>jt", function() require("dap").terminate() end, desc = "Terminate" },
-    { "<leader>jw", function() require("dap.ui.widgets").hover() end, desc = "Widgets" },
-  },
+        -- stylua: ignore
+        keys = {
+            { "<leader>jB", function() require("dap").set_breakpoint(vim.fn.input('Breakpoint condition: ')) end, desc = "Breakpoint Condition" },
+            { "<leader>jb", function() require("dap").toggle_breakpoint() end, desc = "Toggle Breakpoint" },
+            { "<leader>jc", function() require("dap").continue() end, desc = "Run/Continue" },
+            { "<leader>ja", function() require("dap").continue({ before = get_args }) end, desc = "Run with Args" },
+            { "<leader>jC", function() require("dap").run_to_cursor() end, desc = "Run to Cursor" },
+            { "<leader>jg", function() require("dap").goto_() end, desc = "Go to Line (No Execute)" },
+            { "<leader>ji", function() require("dap").step_into() end, desc = "Step Into" },
+            { "<leader>jj", function() require("dap").down() end, desc = "Down" },
+            { "<leader>jk", function() require("dap").up() end, desc = "Up" },
+            { "<leader>jl", function() require("dap").run_last() end, desc = "Run Last" },
+            { "<leader>jo", function() require("dap").step_out() end, desc = "Step Out" },
+            { "<leader>jO", function() require("dap").step_over() end, desc = "Step Over" },
+            { "<leader>jP", function() require("dap").pause() end, desc = "Pause" },
+            { "<leader>jr", function() require("dap").repl.toggle() end, desc = "Toggle REPL" },
+            { "<leader>js", function() require("dap").session() end, desc = "Session" },
+            { "<leader>jt", function() require("dap").terminate() end, desc = "Terminate" },
+            { "<leader>jw", function() require("dap.ui.widgets").hover() end, desc = "Widgets" },
+        },
 
 		config = function()
 			-- load mason-nvim-dap here, after all adapters have been setup
