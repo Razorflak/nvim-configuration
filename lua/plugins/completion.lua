@@ -14,6 +14,7 @@ return {
 		tag = "v0.0.2",
 		dependencies = {
 			"onsails/lspkind.nvim",
+            "hrsh7th/cmp-path",
 		},
 		config = function()
 			local cmp = require("cmp")
@@ -36,6 +37,7 @@ return {
 					{ name = "nvim_lsp" },
 					{ name = "render-markdown" },
 					{ name = "luasnip" }, -- For luasnip users.
+					{ name = "path" },
 				}, {
 					{ name = "buffer" },
 				}),

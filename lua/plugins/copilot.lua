@@ -1,6 +1,7 @@
 return {
 	"zbirenbaum/copilot.lua",
 	event = "VeryLazy",
+	enabled = (_G.LocalConfig and _G.LocalConfig.enable_copilot == true) or false,
 	config = function()
 		require("copilot").setup({
 			panel = {

@@ -1,27 +1,80 @@
-local project_formatters = {
-	{ path = "neomed.git/test-synth", formatter = "prettier" },
-	{ path = "neomed.git/fid-token", formatter = "prettier" },
-	{ path = "neomed.git/fcr-", formatter = "prettier" },
-	{ path = "neomed.git/neo-331-med19-numberly", formatter = "prettier" },
-	{ path = "stickycom.git", formatter = "eslint_d" },
-	{ path = "neomed.git", formatter = "eslint_d" },
-	{ path = "stickureuil.git", formatter = "eslint_d" },
-	{ path = "darts-scorer-v2", formatter = "biome" },
-	{ path = "midv2.git", formatter = "biome-check" },
-}
+local function get_formatters(bufnr)
+	local util = require("lspconfig.util")
 
-local function escape_pattern(text)
-	return text:gsub("([^%w])", "%%%1")
-end
+	local function get_distance(path, root)
+		if not root or root == "" then
+			return 999
+		end
+		local common_len = #path - #root
+		local rel_path = path:sub(common_len + 1)
+		if not rel_path or rel_path == "/" or rel_path == "\\" then
+			return 1
+		end
+		local slashes = 0
+		for i = 1, #rel_path do
+			if rel_path:sub(i, i) == util.path.sep then
+				slashes = slashes + 1
+			end
+		end
+		return slashes + 1
+	end
 
-local function get_formatter(default_formatter)
-	local root_dir = vim.fn.getcwd()
-	for i, project in ipairs(project_formatters) do
-		if string.match(root_dir, escape_pattern(project.path)) then
-			return { project.formatter }
+	if not bufnr then
+		return { "prettierd" }
+	end
+	local path = vim.api.nvim_buf_get_name(bufnr)
+	if not path or vim.bo[bufnr].buftype ~= "" then
+		return { "prettierd" }
+	end
+
+	-- PRETTIER
+	local prettier_root = util.root_pattern(
+		".prettierrc",
+		".prettierrc.json",
+		".prettierrc.yml",
+		".prettierrc.yaml",
+		".prettierrc.js",
+		".prettierrc.cjs",
+		"prettier.config.js",
+		"prettier.config.cjs"
+	)(path)
+	local prettier_dist = get_distance(path, prettier_root)
+
+	local biome_root = util.root_pattern("biome.json", "biome.jsonc")(path)
+	local biome_dist = get_distance(path, biome_root)
+
+	local eslint_root = util.root_pattern(
+		".eslintrc.js",
+		".eslintrc.cjs",
+		".eslintrc.yaml",
+		".eslintrc.yml",
+		".eslintrc.json",
+		"eslint.config.js"
+	)(path)
+	local eslint_dist = get_distance(path, eslint_root)
+
+	local closest_dist = math.min(prettier_dist or 999, biome_dist or 999, eslint_dist or 999)
+	local candidates = {}
+
+	if prettier_dist == closest_dist then
+		table.insert(candidates, { "prettierd", prettier_root })
+	end
+	if biome_dist == closest_dist then
+		table.insert(candidates, { "biome", biome_root })
+	end
+	if eslint_dist == closest_dist then
+		table.insert(candidates, { "eslint_d", eslint_root })
+	end
+
+	for _, candidate in ipairs(candidates) do
+		local formatter, root = candidate[1], candidate[2]
+		local info = require("conform").get_formatter_info(formatter, bufnr)
+		if info.available then
+			return { formatter }
 		end
 	end
-	return { default_formatter }
+
+	return { "prettierd" }
 end
 
 return {
@@ -30,40 +83,33 @@ return {
 		local conform = require("conform")
 		conform.setup({
 			formatters_by_ft = {
-				javascript = { "biome", "prettier" },
-				-- typescript = {"biome", "prettier"},
-				javascriptreact = { "biome", "prettier" },
-				typescriptreact = { "biome", "prettier" },
-				typescript = function()
-					return get_formatter("prettier")
+				javascript = { "prettierd", "biome", "eslint_d" },
+				javascriptreact = { "prettierd", "biome", "eslint_d" },
+				typescriptreact = { "prettierd", "biome", "eslint_d" },
+				typescript = function(bufnr)
+					return get_formatters(bufnr)
 				end,
-				svelte = { "prettier" },
-				css = { "prettier" },
-				html = { "prettier" },
-				json = function()
-					return get_formatter("prettier")
+				svelte = function(bufnr)
+					return get_formatters(bufnr)
 				end,
-				yaml = { "prettier" },
+				css = { "prettierd" },
+				html = { "prettierd" },
+				json = function(bufnr)
+					return get_formatters(bufnr)
+				end,
+				yaml = { "prettierd" },
 				markdown = nil,
-				graphql = { "prettier" },
+				graphql = { "prettierd" },
 				lua = { "stylua" },
 				python = { "isort", "black" },
 			},
-			format_on_save = {
-				lsp_fallback = false,
-				async = false,
-				timeout_ms = 3000,
-			},
+			format_on_save = { lsp_fallback = false, async = false, timeout_ms = 3000 },
 			notify_on_error = false,
 			log_level = vim.log.levels.DEBUG,
 		})
 
 		vim.keymap.set({ "n", "v" }, "<leader>mp", function()
-			conform.format({
-				lsp_fallback = true,
-				async = false,
-				timeout_ms = 3000,
-			})
+			conform.format({ lsp_fallback = true, async = false, timeout_ms = 3000 })
 		end, { desc = "Format file or range (in visual mode)" })
 	end,
 }

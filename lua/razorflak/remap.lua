@@ -76,27 +76,3 @@ vim.api.nvim_set_keymap("n", "<Esc>", ":noh<CR>", { noremap = true, silent = tru
 
 -- Mappe <leader>y pour copier le chemin absolu du fichier courant dans le clipboard système
 vim.api.nvim_set_keymap("n", "<leader>z", [[:let @+ = expand('%:p')<CR>]], { noremap = true, silent = true })
-
--- Obsidian
---
--- 📁 Répertoire principal de tes notes Obsidian
-local obsidian_notes = os.getenv("JTA_OBSIDIAN_REPO") .. "/work"
-
--- 🔍 Rechercher un fichier dans les notes
-vim.keymap.set("n", "<leader>nfs", function()
-	require("telescope.builtin").find_files({
-		search_dirs = { obsidian_notes },
-		default_text = "", -- tu peux mettre un mot-clé ici pour démarrer direct
-		additional_args = function()
-			return { "--no-ignore", "--hidden" }
-		end,
-		path_display = { "smart" },
-	})
-end)
-
--- 🔎 Faire une recherche texte dans les notes
-vim.keymap.set("n", "<leader>nfg", function()
-	require("telescope.builtin").live_grep({
-		search_dirs = { obsidian_notes },
-	})
-end)

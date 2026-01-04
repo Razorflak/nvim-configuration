@@ -24,7 +24,7 @@ local prompts = {
 return {
 	{
 		dir = IS_DEV and "~/Projects/research/CopilotChat.nvim" or nil,
-
+		enabled = (_G.LocalConfig and _G.LocalConfig.enable_copilot == true) or false,
 		lazy = true,
 		"CopilotC-Nvim/CopilotChat.nvim",
 		version = "v3.3.1",

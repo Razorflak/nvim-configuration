@@ -3,6 +3,26 @@ local obsidian_notes = os.getenv("JTA_OBSIDIAN_REPO")
 if not obsidian_notes then
 	return {}
 end
+
+-- 🔍 Rechercher un fichier dans les notes
+vim.keymap.set("n", "<leader>nfs", function()
+	require("telescope.builtin").find_files({
+		search_dirs = { obsidian_notes },
+		default_text = "",
+		additional_args = function()
+			return { "--no-ignore", "--hidden" }
+		end,
+		path_display = { "smart" },
+	})
+end)
+
+-- 🔎 Faire une recherche texte dans les notes
+vim.keymap.set("n", "<leader>nfg", function()
+	require("telescope.builtin").live_grep({
+		search_dirs = { obsidian_notes },
+	})
+end)
+
 return {
 	"epwalsh/obsidian.nvim",
 	version = "*", -- recommended, use latest release instead of latest commit

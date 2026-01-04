@@ -1,10 +1,35 @@
-local function detect_test_suite(file)
-	if file:match("%.spec%.ts$") then
-		return "unit"
-	elseif file:match("%.test%.ts$") then
-		return "integration"
+local util = require("lspconfig.util")
+
+local VITEST_PATTERNS =
+	{ "vitest.config.ts", "vitest.config.js", "vitest.config.mjs", "vitest.config.cjs", "vite.config.ts" }
+local JEST_PATTERNS = { "jest.config.js", "jest.config.ts", "jest.config.mjs", "jest.config.cjs", "jest.config.json" }
+
+local function find_closest_config(path, patterns)
+	local root = util.root_pattern(unpack(patterns))(path)
+	if not root then
+		return nil, math.huge
 	end
-	return "unit" -- Par défaut, on considère que c'est unitaire
+	local distance = select(2, path:gsub(root, "")):gsub("/", ""):len()
+	return root, distance
+end
+
+local function getClosestTestConfig(path)
+	local vitest_root, vitest_dist = find_closest_config(path, VITEST_PATTERNS)
+	local jest_root, jest_dist = find_closest_config(path, JEST_PATTERNS)
+
+	if vitest_dist < jest_dist then
+		return "vitest", vitest_root
+	end
+	if jest_dist < vitest_dist then
+		return "jest", jest_root
+	end
+	if vitest_root then
+		return "vitest", vitest_root
+	end
+	if jest_root then
+		return "jest", jest_root
+	end
+	return nil, vim.fn.getcwd()
 end
 
 return {
@@ -17,83 +42,35 @@ return {
 		"nvim-neotest/neotest-jest",
 		"marilari88/neotest-vitest",
 	},
-	cwd = function(path)
-		print(path, "CWD Global")
-		if string.find(path, "/packages/") then
-			return string.match(path, "(.-/[^/]+/)src")
-		end
-		return vim.fn.getcwd()
-	end,
 	config = function()
-		local adapters = {
-			require("neotest-vitest")({
-				vitestCommand = function()
-					return "pnpx vitest@2.1.4 run"
-				end,
-				vitestConfigFile = function(file)
-					if string.find(file, "/packages/") then
-						return string.match(file, "(.-/[^/]+/)src") .. "vitest.config.ts"
-					end
+		-- Base adapters (sans overrides complexes qui peuvent causer async issues)
+		local neotest_vitest = require("neotest-vitest")({
+			vitestCommand = "pnpx vitest run",
+		})
+		local neotest_jest = require("neotest-jest")({
+			jestCommand = "pnpx jest",
+		})
 
-					return vim.fn.getcwd() .. "/vitest.config.ts"
-				end,
-				cwd = function(path)
-					if string.find(path, "/packages/") then
-						return string.match(path, "(.-/[^/]+/)src")
-					end
-					return vim.fn.getcwd()
-				end,
-			}),
-			--[[ require("neotest-jest")({
-				jestCommand = "pnpx jest ", -- Adapt this command if needed
-				jestConfigFile = function(file)
-					if string.find(file, "/packages/") then
-						return string.match(file, "(.-/[^/]+/)src") .. "jest.config.ts"
-					end
-
-					return vim.fn.getcwd() .. "/jest.config.ts"
-				end,
-				cwd = function(path)
-					print(path, "CWD Jest")
-					if string.find(path, "/packages/") then
-						return string.match(path, "(.-/[^/]+/)src")
-					end
-					return vim.fn.getcwd()
-				end,
-			}), ]]
-			--Sticky back
-			--[[ require("neotest-jest")({
-                jestCommand = "pnpx jest ", -- Adapt this command if needed
-                env = { TEST_SUITE = "integ" },
-                jestConfigFile = function(file)
-                    local ok, util = pcall(require, "lspconfig.util")
-                    if not ok then
-                        vim.notify("lspconfig.util could not be loaded")
-                        return
-                    end
-
-                    local jestConfig = util.root_pattern("jest.config.js")(file)
-                    print("jest config used", jestConfig .. "/jest.config.js")
-                    return jestConfig .. "/jest.config.js"
-                end,
-                cwd = function(path)
-                    print(path, "CWD Jest")
-                    if string.find(path, "/endpoints/") then
-                        return string.match(path, "(.-/[^/]+/)src")
-                    end
-                    return vim.fn.getcwd()
-                end,
-            }), ]]
-		}
 		require("neotest").setup({
 			output_panel = {
-				--		open = "botright vsplit | vertical resize 200",
 				open = "botright vsplit | vertical resize " .. math.floor(vim.o.columns * 0.5),
 			},
-			adapters = adapters,
+			adapters = {
+				neotest_vitest,
+				neotest_jest,
+			},
+			-- Discovery SAFE : évite le bug autocmd fast event
+			discovery = {
+				enabled = true,
+				timeout = 2000,
+			},
+			-- Simple cwd override sans async heavy
+			cwd = function(file)
+				local _, root = getClosestTestConfig(file)
+				return root
+			end,
 		})
 	end,
-
 	event = "VeryLazy",
 	keys = {
 		{
@@ -118,6 +95,16 @@ return {
 			desc = "Run Nearest Test",
 		},
 		{
+			"<leader>trr",
+			function()
+				vim.schedule(function()
+					require("neotest").reload()
+					vim.notify("Neotest reloaded", vim.log.levels.INFO)
+				end)
+			end,
+			desc = "Reload Tests",
+		},
+		{
 			"<leader>td",
 			function()
 				require("neotest").run.run({ strategy = "dap" })
@@ -127,7 +114,7 @@ return {
 		{
 			"<leader>ts",
 			function()
-				require("neotest").summary.toggle()
+				vim.schedule(require("neotest").summary.toggle)
 			end,
 			desc = "Toggle Test Summary",
 		},
