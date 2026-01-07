@@ -5,8 +5,10 @@ local function get_formatters(bufnr)
 	local formatter_override = _G.LocalConfig and _G.LocalConfig.formatter_override
 	if formatter_override then
 		local path = vim.api.nvim_buf_get_name(bufnr)
-		if string.find(path, formatter_override.path) then
-			return { formatter_override.formatter }
+		for _, override in pairs(formatter_override) do
+			if override.path and override.formatter and string.find(path, override.path, 1, true) then
+				return { override.formatter }
+			end
 		end
 	end
 	local function get_distance(path, root)
