@@ -1,6 +1,14 @@
 local function get_formatters(bufnr)
 	local util = require("lspconfig.util")
 
+	-- Check si le path du buffer contient formatter_override.path et si c'est vrai, retourner formatter_override.formatter
+	local formatter_override = _G.LocalConfig and _G.LocalConfig.formatter_override
+	if formatter_override then
+		local path = vim.api.nvim_buf_get_name(bufnr)
+		if string.find(path, formatter_override.path) then
+			return { formatter_override.formatter }
+		end
+	end
 	local function get_distance(path, root)
 		if not root or root == "" then
 			return 999

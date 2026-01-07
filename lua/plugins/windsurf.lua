@@ -4,7 +4,7 @@ return {
 		"nvim-lua/plenary.nvim",
 		"hrsh7th/nvim-cmp",
 	},
-	enabled = (_G.LocalConfig and _G.LocalConfig.enable_windsurf == true) or false,
+	enabled = (_G.LocalConfig and _G.LocalConfig.plugins_flag.enable_windsurf == true) or false,
 	config = function()
 		require("codeium").setup({
 			-- Optionally disable cmp source if using virtual text only

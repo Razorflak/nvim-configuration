@@ -20,8 +20,20 @@ vim.keymap.set("n", "J", "mzJ`z")
 
 -- Ajouter une ligne vide en mode normal
 -- C'est con car ça va aussi vite de faire "O <Esc>" mais j'aime bien
-vim.keymap.set("n", "<leader>o", "o<Esc>")
-vim.keymap.set("n", "<leader>O", "O<Esc>")
+-- Fonction pour vider la ligne si jamais le saute de ligne ajoute les commentaires
+vim.keymap.set("n", "<leader>o", function()
+	local col = vim.fn.col(".")
+	vim.cmd("normal! o<Esc>")
+	vim.cmd('normal! ^"_d$')
+	vim.fn.cursor(vim.fn.line("."), col)
+end)
+
+vim.keymap.set("n", "<leader>O", function()
+	local col = vim.fn.col(".")
+	vim.cmd("normal! O<Esc>")
+	vim.cmd('normal! ^"_d$')
+	vim.fn.cursor(vim.fn.line("."), col)
+end)
 
 -- Remappages pour défilement en maintenant le contenu précédent visible
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
