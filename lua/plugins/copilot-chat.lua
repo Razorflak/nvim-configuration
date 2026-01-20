@@ -144,7 +144,7 @@ return {
 			{
 				"<leader>ccp",
 				":lua require('CopilotChat.integrations.telescope').pick(require('CopilotChat.actions').prompt_actions({selection = require('CopilotChat.select').visual}))<CR>",
-				mode = "x",
+				mode = "n",
 				desc = "CopilotChat - Prompt actions",
 			},
 			{ "<leader>ccc", "<cmd>CopilotChat<cr>", desc = "CopilotChat - Toggle CopilotChat window" },

@@ -45,7 +45,7 @@ return {
 	config = function()
 		-- Base adapters (sans overrides complexes qui peuvent causer async issues)
 		local neotest_vitest = require("neotest-vitest")({
-			vitestCommand = "pnpx vitest run",
+			vitestCommand = "pnpx vitest run --no-coverage",
 		})
 		local neotest_jest = require("neotest-jest")({
 			jestCommand = "pnpx jest",
@@ -57,7 +57,7 @@ return {
 			},
 			adapters = {
 				neotest_vitest,
-				neotest_jest,
+				-- neotest_jest,
 			},
 			-- Discovery SAFE : évite le bug autocmd fast event
 			discovery = {

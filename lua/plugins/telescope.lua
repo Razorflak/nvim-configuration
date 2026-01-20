@@ -39,7 +39,11 @@ return {
 		{
 			"<leader>fg",
 			function()
-				require("telescope.builtin").live_grep()
+				require("telescope.builtin").live_grep({
+					additional_args = function()
+						return { "--hidden" }
+					end,
+				})
 			end,
 			mode = "n",
 		},
@@ -68,7 +72,12 @@ return {
 			"<leader>fv",
 			function()
 				local text = vim.getVisualSelection()
-				require("telescope.builtin").grep_string({ search = text })
+				require("telescope.builtin").grep_string({
+					search = text,
+					additional_args = function()
+						return { "--hidden" }
+					end,
+				})
 			end,
 			mode = "v",
 		},

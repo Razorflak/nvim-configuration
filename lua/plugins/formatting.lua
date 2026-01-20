@@ -15,17 +15,26 @@ local function get_formatters(bufnr)
 		if not root or root == "" then
 			return 999
 		end
+
+		util.path.sep = util.path.sep or "/"
+
 		local common_len = #path - #root
-		local rel_path = path:sub(common_len + 1)
-		if not rel_path or rel_path == "/" or rel_path == "\\" then
+
+		-- Remplacer root dans path par une chaîne vide
+		local rel_path = path:gsub("^" .. vim.pesc(root), "")
+
+		--[[ print("Common length: " .. common_len)
+		print("Relative path: " .. rel_path)
+		print("Path separator: " .. tostring(util.path.sep))
+		print("util.path.sep: " .. util.path.sep) ]]
+		-- Si le chemin relatif est vide ou un simple séparateur, retourner 1
+		if rel_path == "" or rel_path == util.path.sep then
 			return 1
 		end
-		local slashes = 0
-		for i = 1, #rel_path do
-			if rel_path:sub(i, i) == util.path.sep then
-				slashes = slashes + 1
-			end
-		end
+
+		-- Compter les séparateurs dans le chemin relatif
+		local slashes = select(2, rel_path:gsub(util.path.sep, ""))
+
 		return slashes + 1
 	end
 
@@ -48,6 +57,8 @@ local function get_formatters(bufnr)
 		"prettier.config.js",
 		"prettier.config.cjs"
 	)(path)
+	--[[ print("Prettier root: " .. tostring(prettier_root))
+	print("Prettier file: " .. tostring(path)) ]]
 	local prettier_dist = get_distance(path, prettier_root)
 
 	local biome_root = util.root_pattern("biome.json", "biome.jsonc")(path)
@@ -93,7 +104,9 @@ return {
 		local conform = require("conform")
 		conform.setup({
 			formatters_by_ft = {
-				javascript = { "prettierd", "biome", "eslint_d" },
+				javascript = function(bufnr)
+					return get_formatters(bufnr)
+				end,
 				javascriptreact = { "prettierd", "biome", "eslint_d" },
 				typescriptreact = { "prettierd", "biome", "eslint_d" },
 				typescript = function(bufnr)
