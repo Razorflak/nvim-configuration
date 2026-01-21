@@ -31,6 +31,20 @@ return {
 					["gx"] = "actions.open_external",
 					["g."] = "actions.toggle_hidden",
 					["gt"] = "actions.toggle_trash",
+					["<leader>sr"] = {
+						desc = "GrugFar depuis le dossier Oil",
+						callback = function()
+							local path = vim.fn.expand("%")
+							path = path:gsub("^oil://", "")
+
+							require("grug-far").open({
+								paths = { path },
+								prefills = {
+									paths = path,
+								},
+							})
+						end,
+					},
 				},
 				view_options = {
 					show_hidden = true,

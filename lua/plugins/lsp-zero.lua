@@ -1,3 +1,16 @@
+local function getLspConfiguration(configFiles)
+	local ok, util = pcall(require, "lspconfig.util")
+	if not ok then
+		vim.notify("lspconfig.util could not be loaded")
+		return {}
+	end
+
+	return {
+		root_dir = util.root_pattern(unpack(configFiles)),
+		single_file_support = false,
+	}
+end
+
 return {
 	{
 		"williamboman/mason.nvim",
@@ -14,20 +27,40 @@ return {
 		end,
 	},
 	{
-		"mason-org/mason-lspconfig.nvim",
-		opts = {},
-		dependencies = {
-			{ "mason-org/mason.nvim", opts = {} },
-			"neovim/nvim-lspconfig",
-		},
-	},
-	{
 		"neovim/nvim-lspconfig",
 		lazy = false,
 		config = function()
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
 
 			local lspconfig = require("lspconfig")
+
+			-- Liste des serveurs LSP à configurer
+			local servers = {
+				"lua_ls", -- Lua Language Server
+				"tailwindcss", -- Tailwind CSS
+				"rust_analyzer", -- Rust Analyzer
+				"svelte", -- Svelte Language Server
+			}
+
+			-- Configuration commune pour tous les serveurs
+			for _, server in ipairs(servers) do
+				lspconfig[server].setup({
+					capabilities = capabilities,
+				})
+			end
+
+			-- Config Biome
+			lspconfig.biome.setup(getLspConfiguration({ "biome.jsonc" }))
+
+			-- Config ESLint
+			lspconfig.eslint.setup(getLspConfiguration({
+				".eslintrc.js",
+				".eslintrc.cjs",
+				".eslintrc.yaml",
+				".eslintrc.yml",
+				"eslint.config.mjs",
+				".eslintrc.json",
+			}))
 
 			-- Config TS Server (typescript-language-server dans Mason)
 			lspconfig.ts_ls.setup({
