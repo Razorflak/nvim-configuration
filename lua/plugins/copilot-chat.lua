@@ -39,6 +39,7 @@ return {
 			prompts = prompts,
 			auto_follow_cursor = false, -- Don't follow the cursor after getting response
 			show_help = false, -- Show help in virtual text, set to true if that's 1st time using Copilot Chat
+			model = "claude-sonnet-4.5",
 			mappings = {
 				-- Use tab for completion
 				complete = {

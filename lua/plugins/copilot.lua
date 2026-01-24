@@ -36,6 +36,7 @@ return {
 				cvs = false,
 				["."] = false,
 			},
+			model = "claude-sonnet-4.5",
 			copilot_node_command = "node", -- Node.js version must be > 18.x
 			server_opts_overrides = {},
 		})
