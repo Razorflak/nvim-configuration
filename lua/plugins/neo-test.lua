@@ -1,7 +1,13 @@
 local util = require("lspconfig.util")
 
-local VITEST_PATTERNS =
-	{ "vitest.config.ts", "vitest.config.js", "vitest.config.mjs", "vitest.config.cjs", "vite.config.ts" }
+local VITEST_PATTERNS = {
+	"vitest.config.ts",
+	"vitest.config.js",
+	"vitest.config.mjs",
+	"vitest.config.cjs",
+	"vite.config.ts",
+	"vitest.config.ts",
+}
 local JEST_PATTERNS = { "jest.config.js", "jest.config.ts", "jest.config.mjs", "jest.config.cjs", "jest.config.json" }
 
 local function find_closest_config(path, patterns)
@@ -48,7 +54,7 @@ return {
 			vitestCommand = "pnpx vitest run --no-coverage",
 		})
 		local neotest_jest = require("neotest-jest")({
-			jestCommand = "pnpx jest",
+			jestCommand = "pnpx jest run",
 		})
 
 		require("neotest").setup({

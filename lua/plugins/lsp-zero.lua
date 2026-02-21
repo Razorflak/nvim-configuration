@@ -7,7 +7,11 @@ local function getLspConfiguration(configFiles)
 
 	return {
 		root_dir = util.root_pattern(unpack(configFiles)),
-		single_file_support = false,
+		--Eslint9
+		experimental = {
+			useFlatConfig = true,
+		},
+		workingDirectory = { mode = "auto" },
 	}
 end
 
