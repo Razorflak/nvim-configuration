@@ -68,6 +68,7 @@ local function get_formatters(bufnr)
 		".eslintrc.js",
 		".eslintrc.cjs",
 		".eslintrc.yaml",
+		"eslint.config.mjs",
 		".eslintrc.yml",
 		".eslintrc.json",
 		"eslint.config.js"

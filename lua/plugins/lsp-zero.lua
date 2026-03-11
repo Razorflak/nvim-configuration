@@ -1,13 +1,8 @@
 local function getLspConfiguration(configFiles)
-	local ok, util = pcall(require, "lspconfig.util")
-	if not ok then
-		vim.notify("lspconfig.util could not be loaded")
-		return {}
-	end
-
 	return {
-		root_dir = util.root_pattern(unpack(configFiles)),
-		--Eslint9
+		root_dir = function(bufnr)
+			return vim.fs.root(bufnr, configFiles)
+		end,
 		experimental = {
 			useFlatConfig = true,
 		},
@@ -36,7 +31,7 @@ return {
 		config = function()
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
 
-			local lspconfig = require("lspconfig")
+			local lspconfig = vim.lsp.config
 
 			-- Liste des serveurs LSP à configurer
 			local servers = {
@@ -48,26 +43,30 @@ return {
 
 			-- Configuration commune pour tous les serveurs
 			for _, server in ipairs(servers) do
-				lspconfig[server].setup({
+				vim.lsp.config(server, {
 					capabilities = capabilities,
 				})
+				vim.lsp.enable(server)
 			end
-
 			-- Config Biome
-			lspconfig.biome.setup(getLspConfiguration({ "biome.jsonc" }))
+			vim.lsp.config("biome", getLspConfiguration({ "biome.jsonc" }))
+			vim.lsp.enable("biome")
 
-			-- Config ESLint
-			lspconfig.eslint.setup(getLspConfiguration({
-				".eslintrc.js",
-				".eslintrc.cjs",
-				".eslintrc.yaml",
-				".eslintrc.yml",
-				"eslint.config.mjs",
-				".eslintrc.json",
-			}))
+			vim.lsp.config(
+				"biome",
+				getLspConfiguration({
+					".eslintrc.js",
+					".eslintrc.cjs",
+					".eslintrc.yaml",
+					".eslintrc.yml",
+					"eslint.config.mjs",
+					".eslintrc.json",
+				})
+			)
+			vim.lsp.enable("eslint")
 
 			-- Config TS Server (typescript-language-server dans Mason)
-			lspconfig.ts_ls.setup({
+			vim.lsp.config("ts_ls", {
 				capabilities = capabilities,
 				on_attach = function(client, bufnr)
 					local function goto_source_definition()
