@@ -1,7 +1,7 @@
 return {
 	"zbirenbaum/copilot.lua",
 	event = "VeryLazy",
-	enabled = (_G.LocalConfig and _G.LocalConfig.plugins_flag.enable_copilotChat == true) or false,
+	enabled = (_G.LocalConfig and _G.LocalConfig.plugins_flag.enable_copilot == true) or false,
 	config = function()
 		require("copilot").setup({
 			panel = {
@@ -41,8 +41,5 @@ return {
 			server_opts_overrides = {},
 		})
 
-		vim.keymap.set("i", "<tab>", function()
-			require("copilot.suggestion").accept()
-		end)
 	end,
 }

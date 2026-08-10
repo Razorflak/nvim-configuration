@@ -1,30 +1,22 @@
-local obsidian_notes = os.getenv("JTA_OBSIDIAN_REPO")
--- Si la variable d'environnement n'existe pas, on ne charge pas le plugin.
-if not obsidian_notes then
+local obsidian_notes = _G.LocalConfig and _G.LocalConfig.obsidian_path
+if not obsidian_notes or obsidian_notes == "" then
 	return {}
 end
 
+obsidian_notes = vim.fs.normalize(vim.fn.expand(obsidian_notes))
+
 -- 🔍 Rechercher un fichier dans les notes
 vim.keymap.set("n", "<leader>nfs", function()
-	require("telescope.builtin").find_files({
-		search_dirs = { obsidian_notes },
-		default_text = "",
-		additional_args = function()
-			return { "--no-ignore", "--hidden" }
-		end,
-		path_display = { "smart" },
-	})
+	Snacks.picker.files({ cwd = obsidian_notes, hidden = true, ignored = true })
 end)
 
 -- 🔎 Faire une recherche texte dans les notes
 vim.keymap.set("n", "<leader>nfg", function()
-	require("telescope.builtin").live_grep({
-		search_dirs = { obsidian_notes },
-	})
+	Snacks.picker.grep({ cwd = obsidian_notes, hidden = true })
 end)
 
 return {
-	"epwalsh/obsidian.nvim",
+	"obsidian-nvim/obsidian.nvim",
 	version = "*", -- recommended, use latest release instead of latest commit
 	ft = "markdown",
 	-- Replace the above line with this if you only want to load obsidian.nvim for markdown files in your vault:
@@ -36,14 +28,11 @@ return {
 	--   "BufNewFile path/to/my-vault/*.md",
 	-- },
 	dependencies = {
-		-- Required.
-		"nvim-lua/plenary.nvim",
-		"hrsh7th/nvim-cmp",
-		"nvim-telescope/telescope.nvim",
-
-		-- see below for full list of optional dependencies 👇
+		"folke/snacks.nvim",
+		"saghen/blink.cmp",
 	},
 	opts = {
+		legacy_commands = false,
 		workspaces = {
 			{
 				name = "work",
@@ -54,8 +43,7 @@ return {
 			},
 		},
 		picker = {
-			-- Set your preferred picker. Can be one of 'telescope.nvim', 'fzf-lua', or 'mini.pick'.
-			name = "telescope.nvim",
+			name = "snacks.picker",
 			-- Optional, configure key mappings for the picker. These are the defaults.
 			-- Not all pickers support all mappings.
 			note_mappings = {
@@ -75,19 +63,18 @@ return {
 			-- Optional, if you keep daily notes in a separate directory.
 			folder = "notes/dailies",
 			-- Optional, if you want to change the date format for the ID of daily notes.
-			date_format = "%Y%m%d",
+			date_format = "YYYYMMDD",
 			-- Optional, if you want to change the date format of the default alias of daily notes.
-			alias_format = "%B %-d, %Y",
+			alias_format = "MMMM D, YYYY",
 			-- Optional, default tags to add to each new daily note created.
 			default_tags = { "daily-notes" },
 			-- Optional, if you want to automatically insert a template from your template directory like 'daily.md'
 			template = "daily.md",
 		},
-		disable_frontmatter = true,
 		templates = {
 			folder = "templates",
-			date_format = "%Y-%m-%d",
-			time_format = "%H:%M",
+			date_format = "YYYY-MM-DD",
+			time_format = "HH:mm",
 			substitutions = {
 				toto = function()
 					return os.date("%Y%m%d", os.time() - 86400) .. ".md"
@@ -101,31 +88,11 @@ return {
 			},
 		},
 
-		-- Optional, completion of wiki links, local markdown links, and tags using nvim-cmp.
-		completion = {
-			-- Set to false to disable completion.
-			nvim_cmp = true,
-			-- Trigger completion at 2 chars.
-			min_chars = 2,
-		},
+		frontmatter = { enabled = false },
 		ui = {
 			enable = true, -- set to false to disable all additional syntax features
 			update_debounce = 200, -- update delay after a text change (in milliseconds)
 			max_file_length = 5000, -- disable UI features for files with more than this many lines
-			-- Define how various check-boxes are displayed
-			checkboxes = {
-				-- NOTE: the 'char' value has to be a single character, and the highlight groups are defined below.
-				[" "] = { char = "󰄱", hl_group = "ObsidianTodo" },
-				["x"] = { char = "", hl_group = "ObsidianDone" },
-				[">"] = { char = "", hl_group = "ObsidianRightArrow" },
-				["~"] = { char = "󰰱", hl_group = "ObsidianTilde" },
-				["!"] = { char = "", hl_group = "ObsidianImportant" },
-				-- Replace the above with this if you don't have a patched font:
-				-- [" "] = { char = "☐", hl_group = "ObsidianTodo" },
-				-- ["x"] = { char = "✔", hl_group = "ObsidianDone" },
-
-				-- You can also add more custom ones...
-			},
 			-- Use bullet marks for non-checkbox lists.
 			bullets = { char = "•", hl_group = "ObsidianBullet" },
 			external_link_icon = { char = "", hl_group = "ObsidianExtLinkIcon" },
@@ -150,80 +117,48 @@ return {
 				ObsidianHighlightText = { bg = "#75662e" },
 			},
 		},
-		mappings = {
-			-- Overrides the 'gf' mapping to work on markdown/wiki links within your vault.
-			-- Smart action depending on context, either follow link or toggle checkbox.
-			["<cr>"] = {
-				action = function()
-					return require("obsidian").util.smart_action()
-				end,
-				opts = { buffer = true, expr = true },
-			},
-			-- Recherche dans les notes Obsidian
-			["<leader>nff"] = {
-				action = function()
-					vim.cmd("ObsidianSearch")
-				end,
-				opts = { buffer = true },
-			},
-			--Créer une nouvelle note from template
-			["<leader>nn"] = {
-				action = function()
-					vim.cmd("ObsidianNewFromTemplate")
-				end,
-				opts = { buffer = true },
-			},
-			-- Ouvre la note du jour
-			["<leader>nft"] = {
-				action = function()
-					vim.cmd("ObsidianTags")
-				end,
-				opts = { buffer = true },
-			},
-			-- Ouvre la note du jour
-			["<leader>nt"] = {
-				action = function()
-					vim.cmd("ObsidianTemplate")
-				end,
-				opts = { buffer = true },
-			},
-			["<leader>nk"] = {
-				action = function()
-					local current_file = vim.fn.expand("%:p")
-					local target_dir = obsidian_notes .. "/work/tomove/"
-					vim.cmd("silent! !mv '" .. current_file .. "' '" .. target_dir .. "'")
-					vim.cmd("bd!")
-				end,
-				desc = "Déplacer la note courante dans 'tomove'",
-			},
-			["<leader>ndd"] = {
-				action = function()
-					local current_file = vim.fn.expand("%:p")
-					vim.cmd("silent! !rm -f '" .. current_file .. "'")
-					vim.cmd("bd!")
-				end,
-				desc = "Supprimer la note courante",
-			},
-		},
-		-- Optional, by default when you use `:ObsidianFollowLink` on a link to an external
-		-- URL it will be ignored but you can customize this behavior here.
-		---@param url string
-		follow_url_func = function(url)
-			-- Open the URL in the default web browser.
-			vim.fn.jobstart({ "open", url }) -- Mac OS
-			-- vim.fn.jobstart({"xdg-open", url})  -- linux
-			-- vim.cmd(':silent exec "!start ' .. url .. '"') -- Windows
-			-- vim.ui.open(url) -- need Neovim 0.10.0+
-		end,
-		-- Optional, by default when you use `:ObsidianFollowLink` on a link to an image
-		-- file it will be ignored but you can customize this behavior here.
-		---@param img string
-		follow_img_func = function(img)
-			vim.fn.jobstart({ "qlmanage", "-p", img }) -- Mac OS quick look preview
-			-- vim.fn.jobstart({"xdg-open", url})  -- linux
-			-- vim.cmd(':silent exec "!start ' .. url .. '"') -- Windows
-		end,
-
-		-- see below for full list of options 👇
 	},
+	config = function(_, opts)
+		require("obsidian").setup(opts)
+
+		local function set_mappings(buffer)
+			local map_opts = { buffer = buffer, silent = true }
+			local function map(lhs, rhs, desc, extra)
+				vim.keymap.set("n", lhs, rhs, vim.tbl_extend("force", map_opts, extra or {}, { desc = desc }))
+			end
+
+			map("<CR>", require("obsidian.actions").smart_action, "Obsidian smart action", { expr = true })
+			map("<leader>nff", "<cmd>Obsidian search<cr>", "Search notes")
+			map("<leader>nn", "<cmd>Obsidian new_from_template<cr>", "New note from template")
+			map("<leader>nft", "<cmd>Obsidian tags<cr>", "Obsidian tags")
+			map("<leader>nt", "<cmd>Obsidian template<cr>", "Insert Obsidian template")
+			map("<leader>nk", function()
+				local current_file = vim.api.nvim_buf_get_name(buffer)
+				local target = obsidian_notes .. "/work/tomove/" .. vim.fs.basename(current_file)
+				if vim.fn.rename(current_file, target) == 0 then
+					vim.api.nvim_buf_delete(buffer, { force = true })
+				else
+					vim.notify("Impossible de déplacer la note", vim.log.levels.ERROR)
+				end
+			end, "Move note to tomove")
+			map("<leader>ndd", function()
+				if vim.fn.delete(vim.api.nvim_buf_get_name(buffer)) == 0 then
+					vim.api.nvim_buf_delete(buffer, { force = true })
+				else
+					vim.notify("Impossible de supprimer la note", vim.log.levels.ERROR)
+				end
+			end, "Delete note")
+		end
+
+		if vim.bo.filetype == "markdown" then
+			set_mappings(0)
+		end
+		vim.api.nvim_create_autocmd("FileType", {
+			group = vim.api.nvim_create_augroup("razorflak-obsidian-mappings", { clear = true }),
+			pattern = "markdown",
+			callback = function(event)
+				set_mappings(event.buf)
+			end,
+		})
+	end,
 }

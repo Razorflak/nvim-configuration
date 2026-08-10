@@ -1,41 +1,66 @@
-local util = require("lspconfig.util")
-
 local VITEST_PATTERNS = {
 	"vitest.config.ts",
 	"vitest.config.js",
 	"vitest.config.mjs",
 	"vitest.config.cjs",
-	"vite.config.ts",
-	"vitest.config.ts",
+	"vitest.config.mts",
+	"vitest.config.cts",
 }
-local JEST_PATTERNS = { "jest.config.js", "jest.config.ts", "jest.config.mjs", "jest.config.cjs", "jest.config.json" }
+local JEST_PATTERNS = {
+	"jest.config.js",
+	"jest.config.ts",
+	"jest.config.mjs",
+	"jest.config.cjs",
+	"jest.config.json",
+}
 
 local function find_closest_config(path, patterns)
-	local root = util.root_pattern(unpack(patterns))(path)
-	if not root then
-		return nil, math.huge
+	local start = vim.fn.isdirectory(path) == 1 and path or vim.fs.dirname(path)
+	local config = vim.fs.find(patterns, { path = start, upward = true })[1]
+	if not config then
+		return nil, math.huge, nil
 	end
-	local distance = select(2, path:gsub(root, "")):gsub("/", ""):len()
-	return root, distance
+
+	local root = vim.fs.dirname(config)
+	local relative = path:sub(#root + 1)
+	local _, distance = relative:gsub("[/\\]", "")
+	return root, distance, config
 end
 
-local function getClosestTestConfig(path)
-	local vitest_root, vitest_dist = find_closest_config(path, VITEST_PATTERNS)
-	local jest_root, jest_dist = find_closest_config(path, JEST_PATTERNS)
+local function get_closest_test_config(path)
+	local vitest_root, vitest_dist, vitest_config = find_closest_config(path, VITEST_PATTERNS)
+	local jest_root, jest_dist, jest_config = find_closest_config(path, JEST_PATTERNS)
 
 	if vitest_dist < jest_dist then
-		return "vitest", vitest_root
+		return "vitest", vitest_root, vitest_config
 	end
 	if jest_dist < vitest_dist then
-		return "jest", jest_root
+		return "jest", jest_root, jest_config
 	end
 	if vitest_root then
-		return "vitest", vitest_root
+		return "vitest", vitest_root, vitest_config
 	end
 	if jest_root then
-		return "jest", jest_root
+		return "jest", jest_root, jest_config
 	end
-	return nil, vim.fn.getcwd()
+	return nil, nil, nil
+end
+
+local function is_test_file(path)
+	return path ~= nil
+		and (
+			path:match("[._]test%.[cm]?[jt]sx?$") ~= nil
+			or path:match("[._]spec%.[cm]?[jt]sx?$") ~= nil
+			or path:match("[/\\]__tests__[/\\]") ~= nil
+		)
+end
+
+local function uses_adapter(path, adapter)
+	if not is_test_file(path) then
+		return false
+	end
+	local selected = get_closest_test_config(path)
+	return selected == adapter
 end
 
 return {
@@ -44,17 +69,37 @@ return {
 		"nvim-neotest/nvim-nio",
 		"nvim-lua/plenary.nvim",
 		"antoinemadec/FixCursorHold.nvim",
-		"nvim-treesitter/nvim-treesitter",
 		"nvim-neotest/neotest-jest",
 		"marilari88/neotest-vitest",
 	},
 	config = function()
-		-- Base adapters (sans overrides complexes qui peuvent causer async issues)
 		local neotest_vitest = require("neotest-vitest")({
 			vitestCommand = "pnpx vitest run --no-coverage",
+			is_test_file = function(path)
+				return uses_adapter(path, "vitest")
+			end,
+			cwd = function(path)
+				local _, root = get_closest_test_config(path)
+				return root or vim.fn.getcwd()
+			end,
+			vitestConfigFile = function(path)
+				local _, _, config = get_closest_test_config(path)
+				return config
+			end,
 		})
+
 		local neotest_jest = require("neotest-jest")({
-			jestCommand = "pnpx jest run",
+			isTestFile = function(path)
+				return uses_adapter(path, "jest")
+			end,
+			cwd = function(path)
+				local _, root = get_closest_test_config(path)
+				return root or vim.fn.getcwd()
+			end,
+			jestConfigFile = function(path)
+				local _, _, config = get_closest_test_config(path)
+				return config
+			end,
 		})
 
 		require("neotest").setup({
@@ -63,18 +108,13 @@ return {
 			},
 			adapters = {
 				neotest_vitest,
-				-- neotest_jest,
+				neotest_jest,
 			},
 			-- Discovery SAFE : évite le bug autocmd fast event
 			discovery = {
 				enabled = true,
 				timeout = 2000,
 			},
-			-- Simple cwd override sans async heavy
-			cwd = function(file)
-				local _, root = getClosestTestConfig(file)
-				return root
-			end,
 		})
 	end,
 	event = "VeryLazy",
@@ -89,7 +129,7 @@ return {
 		{
 			"<leader>tT",
 			function()
-				require("neotest").run.run(vim.loop.cwd())
+				require("neotest").run.run(vim.uv.cwd())
 			end,
 			desc = "Run All Test Files",
 		},

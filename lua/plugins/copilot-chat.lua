@@ -29,8 +29,8 @@ return {
 		"CopilotC-Nvim/CopilotChat.nvim",
 		version = "v3.3.1",
 		dependencies = {
-			{ "nvim-telescope/telescope.nvim" }, -- Use telescope for help actions
 			{ "nvim-lua/plenary.nvim" },
+			{ "folke/snacks.nvim" },
 		},
 		opts = {
 			question_header = "## User ",
@@ -144,7 +144,10 @@ return {
 		keys = {
 			{
 				"<leader>ccp",
-				":lua require('CopilotChat.integrations.telescope').pick(require('CopilotChat.actions').prompt_actions({selection = require('CopilotChat.select').visual}))<CR>",
+				function()
+					local actions = require("CopilotChat.actions")
+					actions.pick(actions.prompt_actions({ selection = require("CopilotChat.select").visual }))
+				end,
 				mode = "n",
 				desc = "CopilotChat - Prompt actions",
 			},

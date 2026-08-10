@@ -10,6 +10,8 @@ vim.keymap.set("n", "<leader>Y", [["+Y]])
 -- supprime la sélection sans le garder dans le buffer
 vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
 
+local t_opts = { noremap = true, silent = true }
+
 -- En mode V, permet de déplacer la sélection vers le haut ou le bas
 -- /!\ ca fait des trucs chelou ne fin ou début de fichier
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
@@ -41,21 +43,11 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
 
--- Remappages pour gérer le copier-coller en mode visuel
-vim.keymap.set("x", "<leader>p", [["_dP]])
-
--- Remappages pour copier du texte en mode normal et en mode visuel
-vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]])
-vim.keymap.set("n", "<leader>Y", [["+Y]])
-
 -- Remappage pour quitter le mode insertion avec <C-c>
 vim.keymap.set("i", "<C-c>", "<Esc>")
 
 -- Remappage pour désactiver la commande Q (sortir sans enregistrer)
 vim.keymap.set("n", "Q", "<nop>")
-
--- Remappage pour exécuter une commande shell dans une nouvelle fenêtre tmux
-vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
 
 -- Remappage pour effectuer un remplacement global avec la sélection en mode normal
 vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
@@ -86,5 +78,8 @@ vim.keymap.set("n", "<A-j>", ":resize -1<CR>", { noremap = true, silent = true }
 -- Déactive la surbrillance de recherche quand on appuis sur Esc
 vim.api.nvim_set_keymap("n", "<Esc>", ":noh<CR>", { noremap = true, silent = true })
 
--- Mappe <leader>y pour copier le chemin absolu du fichier courant dans le clipboard système
-vim.api.nvim_set_keymap("n", "<leader>z", [[:let @+ = expand('%:p')<CR>]], { noremap = true, silent = true })
+-- Mappe <leader>z pour copier le chemin relatif du fichier courant dans le clipboard système
+vim.api.nvim_set_keymap("n", "<leader>z", [[:let @+ = expand('%')<CR>]], { noremap = true, silent = true })
+
+-- Mappe <leader>Z pour copier le chemin absolu du fichier courant dans le clipboard système
+vim.api.nvim_set_keymap("n", "<leader>Z", [[:let @+ = expand('%:p')<CR>]], { noremap = true, silent = true })

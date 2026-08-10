@@ -82,7 +82,7 @@ local function get_formatters(bufnr)
 		table.insert(candidates, { "prettierd", prettier_root })
 	end
 	if biome_dist == closest_dist then
-		table.insert(candidates, { "biome", biome_root })
+		table.insert(candidates, { "biome-check", biome_root })
 	end
 	if eslint_dist == closest_dist then
 		table.insert(candidates, { "eslint_d", eslint_root })
@@ -103,13 +103,21 @@ return {
 	"stevearc/conform.nvim",
 	config = function()
 		local conform = require("conform")
+		local function format()
+			conform.format({ lsp_format = "fallback", async = false, timeout_ms = 3000 })
+		end
+
 		conform.setup({
 			formatters_by_ft = {
 				javascript = function(bufnr)
 					return get_formatters(bufnr)
 				end,
-				javascriptreact = { "prettierd", "biome", "eslint_d" },
-				typescriptreact = { "prettierd", "biome", "eslint_d" },
+				javascriptreact = function(bufnr)
+					return get_formatters(bufnr)
+				end,
+				typescriptreact = function(bufnr)
+					return get_formatters(bufnr)
+				end,
 				typescript = function(bufnr)
 					return get_formatters(bufnr)
 				end,
@@ -127,13 +135,11 @@ return {
 				lua = { "stylua" },
 				python = { "isort", "black" },
 			},
-			format_on_save = { lsp_fallback = false, async = false, timeout_ms = 3000 },
+			format_on_save = { lsp_format = "never", async = false, timeout_ms = 3000 },
 			notify_on_error = false,
-			log_level = vim.log.levels.DEBUG,
 		})
 
-		vim.keymap.set({ "n", "v" }, "<leader>mp", function()
-			conform.format({ lsp_fallback = true, async = false, timeout_ms = 3000 })
-		end, { desc = "Format file or range (in visual mode)" })
+		vim.keymap.set({ "n", "v" }, "<leader>mp", format, { desc = "Format file or range" })
+		vim.keymap.set({ "n", "v" }, "<leader>f", format, { desc = "Format file or range" })
 	end,
 }
