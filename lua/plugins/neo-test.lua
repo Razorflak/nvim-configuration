@@ -74,7 +74,7 @@ return {
 	},
 	config = function()
 		local neotest_vitest = require("neotest-vitest")({
-			vitestCommand = "pnpx vitest run --no-coverage",
+			vitestCommand = "pnpm exec vitest run --no-coverage",
 			is_test_file = function(path)
 				return uses_adapter(path, "vitest")
 			end,

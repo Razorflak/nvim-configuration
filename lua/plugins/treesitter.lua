@@ -7,6 +7,8 @@ local languages = {
 	"css",
 	"json",
 	"rust",
+	"markdown",
+	"markdown_inline",
 }
 
 return {
