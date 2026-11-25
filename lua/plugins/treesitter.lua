@@ -7,6 +7,7 @@ local languages = {
 	"css",
 	"json",
 	"rust",
+	"java",
 	"markdown",
 	"markdown_inline",
 }
@@ -36,6 +37,7 @@ return {
 					"css",
 					"json",
 					"rust",
+					"java",
 				},
 				callback = function()
 					vim.treesitter.start()

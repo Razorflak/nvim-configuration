@@ -135,7 +135,12 @@ return {
 				lua = { "stylua" },
 				python = { "isort", "black" },
 			},
-			format_on_save = { lsp_format = "never", async = false, timeout_ms = 3000 },
+			format_on_save = function(bufnr)
+				return {
+					lsp_format = vim.bo[bufnr].filetype == "java" and "fallback" or "never",
+					timeout_ms = 3000,
+				}
+			end,
 			notify_on_error = false,
 		})
 

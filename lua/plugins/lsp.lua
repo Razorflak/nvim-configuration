@@ -29,6 +29,8 @@ return {
 				"black",
 				"isort",
 				"js-debug-adapter",
+				"jdtls",
+				"java-debug-adapter",
 			},
 			run_on_start = true,
 			start_delay = 3000,

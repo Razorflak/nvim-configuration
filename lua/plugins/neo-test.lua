@@ -71,6 +71,7 @@ return {
 		"antoinemadec/FixCursorHold.nvim",
 		"nvim-neotest/neotest-jest",
 		"marilari88/neotest-vitest",
+		"rcasia/neotest-java",
 	},
 	config = function()
 		local neotest_vitest = require("neotest-vitest")({
@@ -109,6 +110,7 @@ return {
 			adapters = {
 				neotest_vitest,
 				neotest_jest,
+				require("neotest-java")({}),
 			},
 			-- Discovery SAFE : évite le bug autocmd fast event
 			discovery = {
